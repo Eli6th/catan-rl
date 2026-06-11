@@ -1,0 +1,27 @@
+{
+  "20260611-0049-stage2b-mixed/step_0012533760": {
+    "elo": 1539,
+    "games": 528,
+    "wins": 282
+  },
+  "20260611-0036-stage2-dual-eval/step_0013074432": {
+    "elo": 1524,
+    "games": 464,
+    "wins": 138
+  },
+  "heuristic": {
+    "elo": 1429,
+    "games": 384,
+    "wins": 102
+  },
+  "20260611-0008-stage1-first-to-7/step_0009314304": {
+    "elo": 1213,
+    "games": 448,
+    "wins": 54
+  },
+  "random": {
+    "elo": 1000,
+    "games": 480,
+    "wins": 0
+  }
+}

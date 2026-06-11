@@ -1,0 +1,18 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "visualizer",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vite", "--port", "5173"],
+      "cwd": "visualizer",
+      "port": 5173
+    },
+    {
+      "name": "catan-dashboard",
+      "runtimeExecutable": "rust/target/release/catan-web",
+      "runtimeArgs": ["--metrics-file", "/tmp/catan-metrics.jsonl"],
+      "port": 5050
+    }
+  ]
+}

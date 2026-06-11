@@ -1,0 +1,10 @@
+{
+  "tileGapHoriz": 0.5,
+  "tileGapVert": 0.01,
+  "vertexRadiusScale": 1.0,
+  "edgeLengthScale": 1.0,
+  "vertexOverrides": [],
+  "edgeOverrides": []
+}
+
+

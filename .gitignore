@@ -1,0 +1,17 @@
+# build artifacts
+target/
+node_modules/
+__pycache__/
+*.pyc
+dist/
+
+# training artifacts (checkpoints/replays/metrics live outside git;
+# curated copies are committed under models/)
+training/runs/
+*.jsonl
+!training/results/logs/*.jsonl.gz
+
+# local envs
+.conda/
+.venv/
+.DS_Store

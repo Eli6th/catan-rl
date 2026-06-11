@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catan 3D Visualizer</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        background: #1a1a2e;
+        color: #eee;
+        overflow: hidden;
+      }
+
+      #app {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+      }
+
+      #canvas-container {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 0;
+      }
+
+      /* Control Panel */
+      #controls {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 12px;
+        padding: 16px 24px;
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 100;
+      }
+
+      #controls button {
+        background: #4a4a6a;
+        border: none;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.2s;
+      }
+
+      #controls button:hover {
+        background: #5a5a8a;
+      }
+
+      #controls button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      #controls .action-info {
+        color: #aaa;
+        font-size: 13px;
+        min-width: 200px;
+      }
+
+      #speed-control {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      #speed-control input[type="range"] {
+        width: 80px;
+      }
+
+      /* Info Panel */
+      #info-panel {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 12px;
+        padding: 20px;
+        min-width: 280px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 100;
+      }
+
+      #info-panel h2 {
+        font-size: 18px;
+        margin-bottom: 16px;
+        color: #fff;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        padding-bottom: 8px;
+      }
+
+      .player-info {
+        margin-bottom: 12px;
+        padding: 10px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .player-info.active {
+        border-left: 3px solid #4ade80;
+      }
+
+      .player-name {
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+
+      .player-stats {
+        font-size: 12px;
+        color: #aaa;
+      }
+
+      /* Log Selector */
+      #log-selector {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 12px;
+        padding: 16px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 100;
+      }
+
+      #log-selector select {
+        background: #2a2a4a;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        min-width: 200px;
+      }
+
+      #log-selector label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: #aaa;
+      }
+
+      /* Loading state */
+      #loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 18px;
+        color: #aaa;
+        z-index: 100;
+      }
+
+      /* Player colors */
+      .player-0 { color: #ef4444; }
+      .player-1 { color: #3b82f6; }
+      .player-2 { color: #f5f5f5; }
+      .player-3 { color: #f97316; }
+
+      /* Debug/Editor Panel */
+      #debug-panel {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(40, 20, 60, 0.95);
+        border-radius: 12px;
+        padding: 16px 20px;
+        backdrop-filter: blur(10px);
+        border: 2px solid #a855f7;
+        z-index: 200;
+        min-width: 400px;
+        display: none;
+      }
+
+      #debug-panel.visible {
+        display: block;
+      }
+
+      #debug-panel h3 {
+        margin: 0 0 12px 0;
+        color: #a855f7;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      #debug-panel .close-btn {
+        background: none;
+        border: none;
+        color: #aaa;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 0 4px;
+      }
+
+      #debug-panel .close-btn:hover {
+        color: #fff;
+      }
+
+      .debug-section {
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+      }
+
+      .debug-section:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+
+      .debug-section h4 {
+        font-size: 12px;
+        color: #c4b5fd;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      .slider-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+      }
+
+      .slider-row label {
+        font-size: 12px;
+        color: #ddd;
+        min-width: 120px;
+      }
+
+      .slider-row input[type="range"] {
+        flex: 1;
+        height: 6px;
+        -webkit-appearance: none;
+        background: #4a3a5a;
+        border-radius: 3px;
+        outline: none;
+      }
+
+      .slider-row input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 14px;
+        height: 14px;
+        background: #a855f7;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
+      .slider-row .value {
+        font-size: 11px;
+        color: #a855f7;
+        min-width: 50px;
+        text-align: right;
+        font-family: monospace;
+      }
+
+      .debug-buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .debug-buttons button {
+        background: #4a3a5a;
+        border: 1px solid #a855f7;
+        color: #e9d5ff;
+        padding: 8px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: all 0.2s;
+      }
+
+      .debug-buttons button:hover {
+        background: #5a4a7a;
+      }
+
+      .debug-buttons button.primary {
+        background: #7c3aed;
+        border-color: #7c3aed;
+      }
+
+      .debug-buttons button.primary:hover {
+        background: #8b5cf6;
+      }
+
+      #debug-toggle {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(124, 58, 237, 0.9);
+        border: none;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        z-index: 150;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      #debug-toggle:hover {
+        background: rgba(139, 92, 246, 0.95);
+      }
+
+      .selected-info {
+        background: rgba(168, 85, 247, 0.2);
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 11px;
+        color: #c4b5fd;
+        margin-top: 8px;
+      }
+
+      .selected-info strong {
+        color: #e9d5ff;
+      }
+
+      kbd {
+        background: #3a2a4a;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 10px;
+        color: #c4b5fd;
+        margin-left: 8px;
+      }
+
+      /* ----- Play mode (live Rust engine) ----- */
+      #play-setup {
+        position: absolute;
+        top: 110px;
+        left: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 12px;
+        padding: 16px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(74, 222, 128, 0.4);
+        z-index: 100;
+        width: 240px;
+      }
+
+      #play-setup h3 {
+        font-size: 14px;
+        color: #4ade80;
+        margin-bottom: 10px;
+      }
+
+      #play-setup .row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        font-size: 12px;
+      }
+
+      #play-setup label { color: #aaa; min-width: 60px; }
+
+      #play-setup select, #play-setup input {
+        background: #2a2a4a;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 12px;
+        flex: 1;
+        min-width: 0;
+      }
+
+      #play-setup button {
+        width: 100%;
+        background: #16a34a;
+        border: none;
+        color: white;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-top: 4px;
+      }
+
+      #play-setup button:hover { background: #22c55e; }
+
+      #play-panel {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        bottom: 20px;
+        width: 360px;
+        background: rgba(0, 0, 0, 0.85);
+        border-radius: 12px;
+        padding: 16px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(74, 222, 128, 0.4);
+        z-index: 110;
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+        overflow-y: auto;
+        font-size: 13px;
+      }
+
+      #play-panel h2 {
+        font-size: 16px;
+        color: #4ade80;
+      }
+
+      #play-codec-banner {
+        display: none;
+        background: #7f1d1d;
+        border: 2px solid #ef4444;
+        color: #fecaca;
+        padding: 10px;
+        border-radius: 8px;
+        white-space: pre-wrap;
+        font-family: monospace;
+        font-size: 11px;
+      }
+
+      #play-status { line-height: 1.5; }
+      .play-hint { color: #4ade80; font-size: 12px; }
+
+      #play-trade {
+        display: none;
+        background: rgba(59, 130, 246, 0.2);
+        border: 1px solid #3b82f6;
+        padding: 8px;
+        border-radius: 8px;
+        font-size: 12px;
+      }
+
+      #play-bank {
+        font-size: 12px;
+        color: #ccc;
+        font-family: monospace;
+        line-height: 1.6;
+      }
+
+      #play-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      #play-actions button, #play-tools button {
+        background: #4a4a6a;
+        border: none;
+        color: white;
+        padding: 6px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+
+      #play-actions button:hover, #play-tools button:hover { background: #5a5a8a; }
+
+      #play-actions details {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 6px;
+        padding: 6px;
+      }
+
+      #play-actions details summary {
+        cursor: pointer;
+        font-size: 12px;
+        color: #aaa;
+        margin-bottom: 4px;
+      }
+
+      #play-actions details button { margin: 2px; }
+
+      #play-tools {
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        padding-top: 10px;
+        font-size: 12px;
+      }
+
+      #play-tools .row {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 6px;
+        align-items: center;
+      }
+
+      #play-tools input, #play-tools textarea {
+        background: #2a2a4a;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 6px;
+        padding: 4px 8px;
+        font-size: 11px;
+        font-family: monospace;
+        flex: 1;
+        min-width: 0;
+      }
+
+      #play-tools textarea { height: 48px; resize: vertical; }
+
+      #play-log {
+        flex: 1;
+        min-height: 120px;
+        overflow-y: auto;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 8px;
+        padding: 8px;
+        font-size: 11px;
+        font-family: monospace;
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="canvas-container"></div>
+
+      <div id="loading">Loading visualizer...</div>
+
+      <div id="log-selector">
+        <label for="log-select">Select Game Log</label>
+        <select id="log-select">
+          <option value="">-- Select a log file --</option>
+        </select>
+      </div>
+
+      <div id="play-setup">
+        <h3>▶ Play vs Engine (Rust)</h3>
+        <div class="row">
+          <label for="play-num-players">Players</label>
+          <select id="play-num-players">
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4" selected>4</option>
+          </select>
+        </div>
+        <div class="row">
+          <label for="play-seed">Seed</label>
+          <input id="play-seed" type="text" placeholder="random" />
+        </div>
+        <div class="row">
+          <label for="play-seat-0">Seat 0</label>
+          <select id="play-seat-0">
+            <option value="human" selected>Human</option>
+            <option value="heuristic">Heuristic bot</option>
+            <option value="random">Random bot</option>
+          </select>
+        </div>
+        <div class="row">
+          <label for="play-seat-1">Seat 1</label>
+          <select id="play-seat-1">
+            <option value="human">Human</option>
+            <option value="heuristic" selected>Heuristic bot</option>
+            <option value="random">Random bot</option>
+          </select>
+        </div>
+        <div class="row">
+          <label for="play-seat-2">Seat 2</label>
+          <select id="play-seat-2">
+            <option value="human">Human</option>
+            <option value="heuristic" selected>Heuristic bot</option>
+            <option value="random">Random bot</option>
+          </select>
+        </div>
+        <div class="row">
+          <label for="play-seat-3">Seat 3</label>
+          <select id="play-seat-3">
+            <option value="human">Human</option>
+            <option value="heuristic" selected>Heuristic bot</option>
+            <option value="random">Random bot</option>
+          </select>
+        </div>
+        <button id="btn-play-start">Start Game</button>
+      </div>
+
+      <div id="play-panel">
+        <h2>Live Engine — God View</h2>
+        <div id="play-codec-banner"></div>
+        <div id="play-status"></div>
+        <div id="play-trade"></div>
+        <div id="play-players"></div>
+        <div id="play-bank"></div>
+        <div id="play-actions"></div>
+        <div id="play-tools">
+          <div class="row">
+            <button id="btn-play-bots">Step bots 🤖</button>
+          </div>
+          <div class="row">
+            <input id="play-codec-id" type="number" min="0" max="298" placeholder="codec id 0–298" />
+            <button id="btn-play-codec">Fire id</button>
+          </div>
+          <div class="row">
+            <textarea id="play-json" placeholder='{"type":"BuildCity","player":2,"vertex":10}'></textarea>
+            <button id="btn-play-json">Send JSON</button>
+          </div>
+        </div>
+        <div id="play-log"></div>
+      </div>
+
+      <div id="info-panel" style="display: none;">
+        <h2>Game Info</h2>
+        <div id="turn-info">Turn: 0</div>
+        <div id="players-info"></div>
+      </div>
+
+      <div id="controls" style="display: none;">
+        <button id="btn-reset" title="Reset">⏮ Reset</button>
+        <button id="btn-step-back" title="Step Back">◀ Back</button>
+        <button id="btn-play-pause" title="Play/Pause">▶ Play</button>
+        <button id="btn-step-forward" title="Step Forward">Forward ▶</button>
+        <div id="speed-control">
+          <span>Speed:</span>
+          <input type="range" id="speed-slider" min="0.5" max="5" step="0.5" value="1">
+          <span id="speed-value">1x</span>
+        </div>
+        <div class="action-info">
+          <span id="action-counter">Action: 0 / 0</span>
+        </div>
+      </div>
+
+      <!-- Debug/Editor Toggle Button -->
+      <button id="debug-toggle">🔧 Editor <kbd>D</kbd></button>
+
+      <!-- Debug/Editor Panel -->
+      <div id="debug-panel">
+        <h3>
+          Board Position Editor
+          <button class="close-btn" id="debug-close">&times;</button>
+        </h3>
+
+        <div class="debug-section">
+          <h4>Global Parameters</h4>
+          <div class="slider-row">
+            <label>Tile Gap Horiz</label>
+            <input type="range" id="slider-gap-horiz" min="0" max="1" step="0.01" value="0.5">
+            <span class="value" id="val-gap-horiz">0.50</span>
+          </div>
+          <div class="slider-row">
+            <label>Tile Gap Vert</label>
+            <input type="range" id="slider-gap-vert" min="0" max="0.5" step="0.01" value="0.01">
+            <span class="value" id="val-gap-vert">0.01</span>
+          </div>
+          <div class="slider-row">
+            <label>Vertex Radius Scale</label>
+            <input type="range" id="slider-vertex-scale" min="0.5" max="2" step="0.01" value="1">
+            <span class="value" id="val-vertex-scale">1.00</span>
+          </div>
+          <div class="slider-row">
+            <label>Edge Length Scale</label>
+            <input type="range" id="slider-edge-scale" min="0.5" max="2" step="0.01" value="1">
+            <span class="value" id="val-edge-scale">1.00</span>
+          </div>
+        </div>
+
+        <div class="debug-section">
+          <h4>Selection</h4>
+          <div class="selected-info" id="selected-info">
+            Click a <strong>vertex</strong> (yellow) or <strong>edge</strong> (cyan) marker to select it, then drag to adjust position.
+          </div>
+        </div>
+
+        <div class="debug-section">
+          <h4>Actions</h4>
+          <div class="debug-buttons">
+            <button id="btn-export-config" class="primary">📥 Export Config</button>
+            <button id="btn-copy-config">📋 Copy to Clipboard</button>
+            <button id="btn-reset-config">↺ Reset to Defaults</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
+
