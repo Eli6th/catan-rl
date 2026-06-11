@@ -254,13 +254,125 @@ and the codec/obs layouts are **versioned and frozen** — every checkpoint
 stores them and refuses to run against a mismatch, so trained weights can
 never silently desync from the engine.
 
+## Reproduce every number yourself
+
+All of these run from a fresh clone (Rust toolchain; Python side needs
+`torch numpy maturin`). Numbers below are from an Apple M-series laptop —
+expect the same order of magnitude anywhere.
+
+```bash
+cd rust
+
+# --- Bulk throughput: full games, parallel across cores ----------------
+cargo run -p catan-sim --release -- --games 20000 --players H,H,H,H
+#   elapsed: ~0.5s | games/sec: ~37,000 | steps/sec: ~23,000,000
+cargo run -p catan-sim --release -- --games 100000 --players R,R,R,R
+#   random games are cheaper per step; watch steps/sec climb
+
+# --- The ns/step breakdown: engine vs agent, by phase ------------------
+cargo run -p catan-sim --release -- --games 2000 --players H,H,H,H --profile-steps
+#   engine: legal mask   ... ns/step (..%)     <- the hottest path
+#   engine: execute      ... ns/step (..%)
+#   agent:  choose       ... ns/step (..%)
+#   total                ~221 ns/step
+#   engine-only ceiling  ... ns/step -> steps/sec if the agent were free
+#   (per-step timers add ~100 ns to bucket totals; proportions are the signal)
+
+# --- Microbenchmarks (criterion; saved baselines) -----------------------
+cargo bench -p catan-core --bench engine
+#   mask_main_midgame_heuristic   ~0.3 µs   | roll+distribute  ~0.2 µs
+#   longest_road_15_road_snake    ~1.9 µs   | full random game ~365 µs
+cargo bench -p catan-env --bench env
+#   env/step_mask_obs            ~346 ns    <- one full RL decision
+#   env/vec1024_step_batch       ~296 µs    <- 1,024 envs = 3.4M steps/s
+# Workflow for your own changes:
+#   cargo bench -p catan-core --bench engine -- --save-baseline before
+#   <edit code>
+#   cargo bench -p catan-core --bench engine -- --baseline before   # pass/fail
+
+# --- The zero-allocation proofs ----------------------------------------
+cargo test --release -p catan-core --test zero_alloc
+cargo test --release -p catan-env  --test env_zero_alloc
+
+# --- The Python boundary ------------------------------------------------
+cd catan-py && maturin develop --release && cd ../..
+python training/smoke_env.py
+#   ~370,000 policy-steps/s through Python at batch 256
+
+# --- The legacy Python engine, for the before/after yourself ------------
+pip install -r requirements.txt
+python run_simulation.py --games 100 --seed 42
+#   ~5 games/s — bring a book
+
+# --- What the speed buys: search-based play ------------------------------
+cd rust
+cargo run -p catan-sim --release -- --games 100 --players A,H,H,H \
+    --net ../models/catan-512.ctnn --alpha-config 8,96,300
+#   ~768 full-game rollouts per decision, ~80s for 100 games, ~82% wins
+```
+
 ## What we did NOT do (and why)
 
-- No SIMD intrinsics, no `unsafe`, no custom allocators: autovectorized
-  safe Rust plus the right data layout got within sight of memory
-  bandwidth. The next 2× would cost more correctness risk than it buys.
-- No GPU for the engine: the state machine is branchy and tiny; GPUs want
-  the *network*, which is the next phase's problem (batched leaf
-  evaluation for search).
-- No optimizing before the test fortress existed. Order of operations was
-  the whole game: lock behavior, save a baseline, then make it fast.
+Performance docs usually list what was done. The skipped optimizations are
+just as informative — each was considered and declined for a reason.
+
+**No hand-written SIMD.** SIMD (Single Instruction, Multiple Data) is the
+CPU's built-in vector hardware: special wide registers that apply one
+instruction to many values at once — 4–16 floats per cycle instead of one
+(NEON on Apple Silicon, AVX on x86). You can program it directly with
+"intrinsics" (per-architecture pseudo-assembly), and for raw matmul
+throughput that's often worth it. We declined, for three reasons:
+
+1. *The compiler already does it when the data lets it.* LLVM
+   auto-vectorizes simple loops over contiguous arrays — our dot products
+   (net inference) and array sweeps compile to NEON automatically. The
+   prerequisite is layout (fixed contiguous arrays, no pointer chasing),
+   which is idea #1. Write the layout, get the SIMD free.
+2. *The hot paths that remain don't vectorize.* Rule logic is branchy
+   ("if the robber is here and that player has cards and..."); SIMD hates
+   branches — all lanes must take the same path.
+3. *Bitboards already are SIMD, secretly.* A `u64` AND processes **64
+   board positions in one ordinary instruction** — one-bit lanes in a
+   general-purpose register. The distance-rule check is effectively a
+   64-wide vector op without a single intrinsic. This is the oldest trick
+   in computer chess, and it's why the engine gets vector-class speedups
+   while staying portable, safe, and readable.
+
+Intrinsics would buy maybe 2× on inference at the cost of
+per-architecture code, `unsafe` blocks, and a maintenance tax — and the
+batch path is already memory-bandwidth-bound, where more compute buys
+nothing.
+
+**No `unsafe`.** Rust lets you opt out of bounds/aliasing checks in
+`unsafe` blocks; classic engine territory ("skip the bounds check in the
+inner loop"). But the compiler elides almost all bounds checks here
+anyway — indices into fixed-size arrays with provable ranges — and this
+codebase's entire premise is that *correctness is the product* (the agent
+exploits any bug it finds). Trading proven-safe for a low single-digit
+percent was never on the table.
+
+**No custom allocators.** Arena/bump allocators make allocation cheap.
+We made allocation *nonexistent* instead — the steady state performs
+zero heap allocations, enforced by test. The fastest allocator is the one
+you never call. (This is also why the counting-allocator test matters
+more than any allocator choice: it keeps the count at zero forever.)
+
+**No GPU for the engine.** GPUs win when thousands of identical
+computations run in lockstep (big matmuls — which is why the *network*
+trains on one). A Catan step is the opposite: a tiny, branchy state
+machine where every game is at a different phase taking different paths —
+divergent control flow leaves GPU lanes idle. The right split, and the
+one we built: engine on CPU cores (embarrassingly parallel at *game*
+granularity via rayon — no locks, games share nothing), network on the
+accelerator. The future batched-leaf-evaluation search keeps that split.
+
+**No fine-grained parallelism.** No threads *inside* a game, no locks, no
+atomics in the hot path. Parallelism lives at the game level where it's
+free. The one shared structure anywhere near the hot loop (replay/stat
+harvesting in the vec env) is a mutex touched only on episode *end* —
+once per ~600 steps.
+
+**No optimizing before the test fortress existed.** Order of operations
+was the whole game: lock behavior (goldens + property tests + oracle),
+save a baseline, then make it fast. Three days of aggressive optimization,
+zero behavioral regressions — that's not luck, it's sequencing.
