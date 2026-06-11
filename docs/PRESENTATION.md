@@ -38,8 +38,23 @@ build order was deliberately: **tests first, engine second, learning last**.
   steps are fixed work). Criterion benchmarks with saved baselines.
 
 *Why so fast?* Search and training are compute-hungry: every microsecond
-per step is a multiplier on everything downstream. 88 ns/step is what makes
-"96 rollouts per candidate move" affordable later.
+per step is a multiplier on everything downstream. The ladder (full detail
++ methodology in [PERFORMANCE.md](PERFORMANCE.md)):
+
+| Stage | ns/step (heuristic games) |
+|---|---|
+| Python engine | ~300,000 |
+| Rust port (data-oriented: 500-byte Copy state, const topology) | ~820 |
+| + bitmask boards & cached road lengths | **221** (87 random) |
+
+~3,400x per core, 37M steps/s across 10 threads — and every stage shipped
+with the goldens and property tests green (fast-but-wrong loses to slow:
+the agent WILL learn your bugs). Three rules made it safe: measure ns/step
+never games/sec; criterion saved baselines for statistical pass/fail; and
+a counting global allocator proving zero heap allocations per step. This
+speed is what makes "96 full-game rollouts per candidate move" affordable
+later — one AlphaBot decision would take ~30 seconds on the Python engine;
+it takes ~50 ms here.
 
 **DEMO 1:** `cargo run -p catan-sim --release -- --games 100000 --players H,R,H,R`
 (100k full games in ~seconds, live win-rate table.)
