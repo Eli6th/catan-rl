@@ -1,10 +1,9 @@
-# Catan RL — a Settlers of Catan engine and self-learning agent
+# Catan RL: a Settlers of Catan engine and self-learning agent
 
 A complete reinforcement-learning stack for 4-player Settlers of Catan,
 built from scratch: a zero-allocation Rust rules engine (~88 ns/step), a
 batched RL environment with PyO3 bindings (~3.4M policy-steps/s), PPO
-self-play training, a live training dashboard, an Elo tournament harness —
-and an AlphaZero-style search agent that beats a competent scripted player
+self-play training, a live training dashboard, an Elo tournament harness: and an AlphaZero-style search agent that beats a competent scripted player
 **82%** of the time in 4-player games (fair share: 25%).
 
 Everything below was trained and measured on a laptop CPU.
@@ -24,11 +23,11 @@ Win rate vs three frozen heuristic opponents, 4-player first-to-7:
 
 The interesting part is the journey: the PPO policy hit a hard wall at 65%
 that survived 8× more training, doubled exploration, diverse opponents,
-and a 4× larger network — a controlled-experiment elimination recorded in
+and a 4× larger network: a controlled-experiment elimination recorded in
 [training/results/EXPERIMENTS.md](training/results/EXPERIMENTS.md). The
 wall broke only when the policy was given *planning*: its own policy head
 pruning a Monte Carlo search. Reactive policies plateau; search breaks
-through — the TD-Gammon → AlphaGo arc, reproduced on a laptop in a day.
+through: the TD-Gammon → AlphaGo arc, reproduced on a laptop in a day.
 
 ## Architecture
 
@@ -91,19 +90,19 @@ and sample compact replays (`.ctrp`, ~4.5 bytes/action).
 
 ## Repo map
 
-- `rust/` — the engine workspace; see [rust/README.md](rust/README.md) for
+- `rust/`: the engine workspace; see [rust/README.md](rust/README.md) for
   the testing fortress, rules coverage, and performance methodology.
-- `training/` — PPO trainer, Elo harness, net export; see
+- `training/`: PPO trainer, Elo harness, net export; see
   [training/README.md](training/README.md) for the checkpoint contract and
   metrics schema.
-- `training/results/` — the full experiment ledger and raw run logs.
-- `docs/PERFORMANCE.md` — the speed story: Python ~300,000 ns/step to
+- `training/results/`: the full experiment ledger and raw run logs.
+- `docs/PERFORMANCE.md`: the speed story: Python ~300,000 ns/step to
   Rust 87 ns/step (~3,400x/core), the optimization ladder, and the
   regression guards that keep it fast.
-- `docs/PRESENTATION.md` — the story of the build, end to end.
-- `engine/`, `catan_service/`, `visualizer/` — the original Python engine
+- `docs/PRESENTATION.md`: the story of the build, end to end.
+- `engine/`, `catan_service/`, `visualizer/`: the original Python engine
   (kept for the 3D visualizer) and the browser frontend.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT: see [LICENSE](LICENSE).
