@@ -81,27 +81,72 @@ Python engine and ~50 ms here.
 
 ## 3. The RL environment: design decisions (5 min)
 
-- **Action codec**: every possible move maps to one of **299 discrete ids**,
-  with an exact legality mask. Trading is a bounded menu (1–2 of one
-  resource for 1 of another, max 3 offers/turn), deliberate scope cut to
-  keep the action space learnable.
-- **Observation**: 1,350 floats, seat-relative (the acting player is always
-  "player 0", one policy plays all seats), dice encoded as production
-  probabilities, Perfect/Realistic visibility modes differing only in the
-  opponent-private block.
-- **AEC semantics**: `step()` returns the *next seat that must decide*;
-  forced moves (exactly one legal action) resolve inside the env so the
-  policy only ever sees real decisions. Dice stay internal chance nodes.
-- **Versioned contracts**: codec/obs versions are stored in every
-  checkpoint and hard-fail on mismatch, trained weights can never silently
-  desync from the engine.
-- **Bot seats**: any seat can be played engine-side by a scripted player at
-  engine speed, this one feature later enabled fixed-opponent evaluation,
-  mixed-opponent training, and Elo tournaments as pure config.
+A neural network is a function from a fixed-size vector of numbers to a
+fixed-size vector of numbers. A Catan game is none of those things: the
+set of legal moves changes every turn, the state is structured, four
+players act in rotation, and dice interrupt everything. The environment
+layer is the translation between the two, and every design decision below
+answers one mismatch.
 
-Python sees the whole thing through PyO3 as a batched VecEnv: one call per
-training step for 256 games, GIL released, ~370k policy-steps/s through
-Python. Engine never the bottleneck (~3.4M steps/s in pure Rust).
+*The moves problem.* The network's output layer has a fixed width, but
+"what can I do?" in Catan varies from 2 options to dozens. The answer is
+a codec: every move the game can ever offer maps to one of **299
+discrete ids** (build X at vertex v, offer trade T, play card C, and so
+on), and alongside the observation the environment emits a legality
+mask, a 299-long yes/no vector. The network outputs a score for all 299;
+illegal entries are erased before sampling. Two properties were tested
+rather than assumed: the mapping is total (every id decodes to some
+action, every legal action encodes to exactly one id), and the mask is
+fuzzed against the engine so "masked legal" and "engine accepts" can
+never drift apart. The deliberate scope cut lives here: trading is a
+bounded menu (1 or 2 of one resource for 1 of another, at most 3 offers
+a turn). Free-form trades would multiply the action space by orders of
+magnitude; a bounded menu keeps the mechanic and keeps the space
+learnable.
+
+*The state problem.* The observation is 1,350 floats covering the full
+board (every tile, vertex, and edge), public player state, the acting
+player's hand, the bank, and any pending trade. Two encoding decisions
+matter. First, dice numbers are encoded as production probabilities (a
+6 enters as 5/36), because the numeral is irrelevant and the probability
+is what the network must learn anyway; encode the meaning, not the
+symbol. Second, the observation is seat-relative: whoever is acting sees
+themselves as "player 0" and opponents in turn order from their seat.
+One network therefore plays all four seats, every game produces four
+seats' worth of experience, and the network never wastes capacity
+learning "seat 2's strategy". The assumption baked in (strategy is
+seat-symmetric up to turn order) holds, because turn order itself is in
+the observation.
+
+*The turns problem.* Four players alternate, and many "moves" are not
+decisions at all: rolling at the start of a turn is mandatory, and a
+player with one legal option has no choice. The environment uses
+turn-based multi-agent semantics: `step(action)` executes the move and
+fast-forwards to the next seat that faces a real choice, resolving
+forced moves internally and treating dice as internal chance events
+rather than actions. A tested invariant: every observation the policy
+ever sees has at least two legal actions. The trainer never spends a
+forward pass on a non-decision.
+
+*The trust problem.* Trained weights are only meaningful against the
+exact action and observation layouts they were trained on. Both layouts
+are versioned, every checkpoint stores the versions, and every loader
+refuses a mismatch. A network can never silently play a game it does not
+understand.
+
+*The opponent problem.* Any seat can be assigned to a scripted player
+that acts inside the environment at engine speed, invisible to the
+policy. This one feature, added for evaluation, turned out to be the
+workhorse of the whole project: fixed-opponent benchmarks, mixed-opponent
+training, and Elo tournaments all became configuration changes rather
+than new code.
+
+*The boundary problem.* Python orchestrates training but must never sit
+inside the hot loop. The PyO3 bindings move an entire batch per call:
+256 games step in parallel Rust with the GIL released, and NumPy arrays
+come back, ~370k policy-steps/s through Python against ~3.4M in pure
+Rust. The boundary is designed to disappear: training profiles show only
+PyTorch.
 
 ## 4. Training arc: 25% → 65% (8 min)
 
