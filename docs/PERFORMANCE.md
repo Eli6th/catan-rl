@@ -58,21 +58,42 @@ what a rule check physically is.
 
 ### 1. The state is a value, not an object graph
 
-The Rust `GameState` is a roughly 500-byte `Copy` struct of fixed-size
-arrays. No `HashMap`, no `Vec`, no pointers, no heap anywhere in the hot
-state. Board topology (vertex adjacency, edge incidence, tile-vertex
-membership) is precomputed into `const` tables, including a
-`tiles_by_number` index so a dice roll resolves directly to its affected
-tiles without scanning the board.
+In the Python engine, the `GameState` object is really a web of
+pointers: each field references a numpy array or list allocated
+somewhere else on the heap, and copying a game means walking that whole
+web (`deepcopy`), allocating a fresh object for every node and rewiring
+the references. Thousands of operations, each chasing a pointer to a
+different memory location.
 
-Two consequences, one immediate and one that paid off later:
+The Rust `GameState` is one contiguous block of about 500 bytes where
+every field's data is stored inline. `resources: [[i16; 5]; 4]` is not a
+pointer to a table somewhere; it is 40 numbers sitting inside the struct
+itself. This is possible because Catan's sizes are constants (19 tiles,
+54 vertices, 72 edges, at most 4 players, 5 resources), so every
+collection can be a fixed-size array: `settlements: [i8; 54]` is exactly
+54 bytes with vertex v's owner at index v. No `HashMap` (which hashes
+the key on every lookup), no `Vec` (which stores its contents behind a
+pointer in a separate heap block), no allocation, no pointer chasing.
 
-- The whole game fits in L1 cache, so every rule check operates on data
-  that is already in registers or L1.
-- Cloning a game is a memcpy. This single property is what made Monte
-  Carlo search practical: AlphaBot clones the game roughly 768 times per
-  decision and plays each copy to completion. In the Python engine, a
-  defensive deep copy of the state cost milliseconds by itself.
+The state therefore behaves like an `int`: copying it means duplicating
+its bytes, nothing more. Three consequences:
+
+- The whole game fits in L1 cache (about 8 cache lines). A CPU reads
+  RAM in ~100 ns but L1 in ~1 ns, so after a few touches every rule
+  check operates on ~1 ns memory. A scattered object graph can never
+  achieve this.
+- Cloning a game is a memcpy, roughly 20 ns. This is what made Monte
+  Carlo search practical: AlphaBot clones the game about 768 times per
+  decision. At memcpy cost that is ~15 µs of copying per decision; at
+  Python deepcopy cost (milliseconds per copy) it would be nearly a
+  second of pure copying before any simulation ran.
+- Anything that is a function of the static board is computed once at
+  setup and becomes a table lookup. `neighbor_mask` is the adjacency
+  example; `tiles_by_number` is the dice example: the mapping from a
+  roll value to the tiles bearing that number token never changes during
+  play (the robber changes whether a tile pays, not its token), so a
+  roll of 8 jumps directly to its 1 to 3 tiles instead of scanning all
+  19 every roll.
 
 ### 2. Bitboards: the board as integers
 
