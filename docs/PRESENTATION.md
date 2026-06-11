@@ -37,24 +37,43 @@ build order was deliberately: **tests first, engine second, learning last**.
 - Speed measured in **ns/step, never games/sec** (games vary in length;
   steps are fixed work). Criterion benchmarks with saved baselines.
 
-*Why so fast?* Search and training are compute-hungry: every microsecond
-per step is a multiplier on everything downstream. The ladder (full detail
-+ methodology in [PERFORMANCE.md](PERFORMANCE.md)):
+*The before*: the original Python engine answered every rules question
+with interpreted loops — "where can I build a road?" walked all 72 edges,
+both endpoints each, all adjacent edges per endpoint, a method call per
+probe, then allocated a fresh list for the answer. ~50–100 ns of
+interpreter dispatch per loop iteration before any work happens; the GIL
+caps it at one core. Net: ~300,000 ns/step, ~5 games/s. Structural, not
+fixable in place — the fix is changing what a rule check physically *is*.
+
+*The after*, in three ideas (full walkthroughs in
+[PERFORMANCE.md](PERFORMANCE.md)):
+
+1. **The state is a value** — a ~500-byte Copy struct, no heap, fits in
+   L1; cloning a game for a search rollout is a memcpy. (This is the line
+   that quietly makes AlphaBot possible five sections from now.)
+2. **The board is a u64** — 54 vertices, 64 bits. The distance rule plus
+   occupancy plus connectivity is three AND ops:
+   `occupied & bit == 0 && occupied & neighbors[v] == 0 && my_roads & bit != 0`
+   — and one mask expression enumerates every legal settlement at once.
+   Mask generation −52%.
+3. **Cache the pathological rule** — longest-road is a longest-trail
+   search recomputed whole-board on every build; the invalidation insight
+   (a new piece only affects players whose network touches it) makes it a
+   per-player cache with adjacency-filtered recomputes. Full games −31%.
 
 | Stage | ns/step (heuristic games) |
 |---|---|
 | Python engine | ~300,000 |
-| Rust port (data-oriented: 500-byte Copy state, const topology) | ~820 |
-| + bitmask boards & cached road lengths | **221** (87 random) |
+| Rust port (data layout) | ~820 |
+| + bitboards & road cache | **221** (87 random) |
 
-~3,400x per core, 37M steps/s across 10 threads — and every stage shipped
-with the goldens and property tests green (fast-but-wrong loses to slow:
-the agent WILL learn your bugs). Three rules made it safe: measure ns/step
-never games/sec; criterion saved baselines for statistical pass/fail; and
-a counting global allocator proving zero heap allocations per step. This
-speed is what makes "96 full-game rollouts per candidate move" affordable
-later — one AlphaBot decision would take ~30 seconds on the Python engine;
-it takes ~50 ms here.
+~3,400x per core, 37M steps/s across 10 threads. Enforced forever by a
+counting global allocator (zero heap allocations per step — it caught 15
+allocs/800 steps on day one), criterion baselines, and the iron rule that
+goldens stay green through every optimization: fast-but-wrong loses to
+slow, because the agent WILL learn your bugs. Payoff line for the room:
+one AlphaBot decision = ~768 full-game rollouts = ~30 seconds on the
+Python engine, ~50 ms here.
 
 **DEMO 1:** `cargo run -p catan-sim --release -- --games 100000 --players H,R,H,R`
 (100k full games in ~seconds, live win-rate table.)
