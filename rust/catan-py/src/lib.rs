@@ -263,7 +263,7 @@ impl Env {
         (r.seat, r.reward, r.done, r.winner, r.terminal_rewards)
     }
 
-    fn obs<'py>(&self, py: Python<'py>) -> Bound<'py, PyArray1<f32>> {
+    fn obs<'py>(&mut self, py: Python<'py>) -> Bound<'py, PyArray1<f32>> {
         let mut buf = vec![0.0f32; OBS_DIM];
         self.inner.write_obs(&mut buf);
         PyArray1::from_vec_bound(py, buf)

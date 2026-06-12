@@ -31,9 +31,16 @@ any win that costs correctness confidence.
   additions (the env benches drifted ~12% for known reasons; the
   baseline should reflect the current intended state).
 
-## Tier 1: the env decision path, 393 ns to ~150 ns (days)
+## Tier 1: the env decision path (FIRST RESULTS on perf/tier1-2)
 
-Two known inefficiencies, both measurement-backed:
+Measured on the branch: per-seat cached board blocks cut the single-env
+decision 24% (339 to 257 ns). Lesson learned in the process: the same
+cache REGRESSED the 1,024-env batch by 14%, because that path is
+bandwidth-bound and the cache adds a copy stream; the batch path now
+encodes directly (net -7% there from the encoder split alone). Compute
+optimizations and bandwidth optimizations are different problems.
+
+Remaining items:
 
 - **Incremental observation encoding.** The 1,350-float observation is
   rebuilt from scratch every decision, but most of it did not change.
@@ -66,11 +73,14 @@ and more rollouts per second:
   across cores with rayon: near-linear, so ~8x wall-clock on a 10-core
   machine. Straightforward because rollouts share nothing but the
   read-only root state and the net.
-- **Early termination (racing).** After a few samples, many candidates
-  are statistically hopeless. Standard bandit-style racing (stop
-  sampling a candidate once its confidence interval is dominated by the
-  leader's) typically saves 2 to 3x of rollouts with no measurable
-  strength loss. Pure search-loop logic, no engine changes.
+- **Early termination (racing). DONE on perf/tier1-2.** Sequential
+  halving: the budget is spent in rounds and the worse half of the
+  candidates is dropped after each. Measured at equal budget config:
+  1.6x faster wall-clock at unchanged strength (81.7% vs 84.2%, within
+  noise). Reinvesting the savings (samples 96 to 240): **92.5% and
+  95.8% on two 120-game seeds (94.2% combined)**, a new best agent, up
+  from 82%. About 60% of the flat scheme's rollouts were spent
+  confirming losers.
 - **Shorter rollouts once the value head is retrained.** This is the
   search-as-teacher milestone from the main roadmap: a value head
   trained on true (state, outcome) pairs lets rollouts truncate after a

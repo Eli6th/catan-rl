@@ -81,7 +81,17 @@ fn rel_of(seat: usize, other: usize, n: usize) -> usize {
 /// Allocation-free; zeroes the buffer first.
 pub fn encode_obs(game: &CatanGame, seat: usize, visibility: Visibility, out: &mut [f32]) {
     assert_eq!(out.len(), OBS_DIM, "obs buffer must be OBS_DIM");
-    out.fill(0.0);
+    out[..PLAYERS].fill(0.0);
+    encode_obs_board(game, seat, &mut out[..PLAYERS]);
+    encode_obs_dynamic(game, seat, visibility, out);
+}
+
+/// The board blocks (tiles, vertices, edges): obs indices 0..PLAYERS.
+/// These change only on builds and robber moves, so callers may cache the
+/// result per seat and re-encode only when a board-changing action ran.
+/// `out` must be the 0..PLAYERS slice, pre-zeroed.
+pub fn encode_obs_board(game: &CatanGame, seat: usize, out: &mut [f32]) {
+    assert_eq!(out.len(), PLAYERS);
     let s = &game.state;
     let n = s.num_players;
     let topo = topology();
@@ -125,6 +135,23 @@ pub fn encode_obs(game: &CatanGame, seat: usize, visibility: Visibility, out: &m
             out[EDGES + e * EDGE_STRIDE + rel] = 1.0;
         }
     }
+
+}
+
+/// Everything from PLAYERS onward (players, hands, bank, context, trade).
+/// Takes the full OBS_DIM slice and rewrites only the dynamic suffix.
+pub fn encode_obs_dynamic(
+    game: &CatanGame,
+    seat: usize,
+    visibility: Visibility,
+    out: &mut [f32],
+) {
+    assert_eq!(out.len(), OBS_DIM);
+    out[PLAYERS..].fill(0.0);
+    let s = &game.state;
+    let n = s.num_players;
+    let topo = topology();
+    let _ = topo;
 
     // ---- players: public info per relative seat -------------------------
     let target = s.victory_target as f32;

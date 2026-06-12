@@ -128,20 +128,34 @@ impl Player for AlphaBot {
             .sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap_or(std::cmp::Ordering::Equal));
         let k = self.root_k.min(self.ranked.len());
 
-        let searched: Vec<Action> = self.ranked[..k].iter().map(|r| r.1).collect();
-        let mut best = searched[0];
-        let mut best_score = f32::MIN;
-        for action in searched {
-            let mut total = 0.0;
-            for _ in 0..self.samples {
-                total += self.rollout_value(game, &action, me);
+        // Sequential halving: spend the rollout budget in rounds, dropping
+        // the worse half of the candidates after each. Hopeless candidates
+        // stop consuming budget early; the eventual winner is sampled most.
+        // Total budget matches the flat scheme (samples x k).
+        let mut survivors: Vec<(Action, f32, u32)> = self.ranked[..k]
+            .iter()
+            .map(|r| (r.1, 0.0f32, 0u32))
+            .collect();
+        let mut budget = (self.samples * k) as u32;
+        let mut rounds = (usize::BITS - (k - 1).leading_zeros()).max(1); // ceil(log2 k)
+        while survivors.len() > 1 && budget > 0 {
+            let per = (budget / rounds.max(1) / survivors.len() as u32).max(2);
+            for (action, sum, n) in survivors.iter_mut() {
+                let take = per.min(budget);
+                for _ in 0..take {
+                    *sum += self.rollout_value(game, &{ *action }, me);
+                }
+                *n += take;
+                budget = budget.saturating_sub(take);
             }
-            let score = total / self.samples as f32;
-            if score > best_score {
-                best_score = score;
-                best = action;
-            }
+            survivors.sort_by(|a, b| {
+                let ma = a.1 / a.2.max(1) as f32;
+                let mb = b.1 / b.2.max(1) as f32;
+                mb.partial_cmp(&ma).unwrap_or(std::cmp::Ordering::Equal)
+            });
+            survivors.truncate(survivors.len().div_ceil(2));
+            rounds = rounds.saturating_sub(1);
         }
-        best
+        survivors[0].0
     }
 }
