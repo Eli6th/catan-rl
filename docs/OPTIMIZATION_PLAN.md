@@ -80,15 +80,16 @@ and more rollouts per second:
 
 ## Tier 3: net inference, matters after value leaves land (days)
 
-The current scalar-with-autovectorization matmul streams 4.4 MB of
-weights per forward pass one row at a time. Three escalating options:
+Status update: the first two rungs landed within hours of the repo going
+public, via PR #1 (joshdchang). The naive `iter().zip().sum()` dot never
+auto-vectorized at all (float addition is not associative, so LLVM kept
+the reduction serial; verified in the disassembly). The PR accumulates
+into 16 independent lanes (429 to 54 µs per forward pass) and stores the
+trunk weights input-major so whole columns accumulate per nonzero input,
+skipping the ~90% zero inputs outright, the NNUE trick from chess
+engines (54 to 14 µs, about 30x total; 18.7 µs verified independently).
+Strength re-verified at 84% over 120 games. Remaining rungs:
 
-- **Multiple accumulators in the dot product.** The naive
-  `iter().zip().sum()` builds one dependency chain, so the CPU waits on
-  each fused add. Splitting into 4 to 8 independent accumulators and
-  combining at the end keeps the FMA pipeline full. Safe Rust, often 2
-  to 4x on exactly this pattern. The first explicit-SIMD-shaped change
-  worth making, and it requires no intrinsics.
 - **Batched leaf evaluation.** Evaluating leaves one at a time makes the
   forward pass memory-bound: every evaluation re-streams all 4.4 MB of
   weights for one vector. Collect 16 to 64 leaf observations and
