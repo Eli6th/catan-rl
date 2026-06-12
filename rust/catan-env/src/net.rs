@@ -10,9 +10,9 @@ use crate::obs::OBS_DIM;
 
 pub struct MlpNet {
     pub hidden: usize,
-    w1: Vec<f32>, // [hidden][OBS_DIM]
+    w1t: Vec<f32>, // [OBS_DIM][hidden] — input-major (transposed at load)
     b1: Vec<f32>,
-    w2: Vec<f32>, // [hidden][hidden]
+    w2t: Vec<f32>, // [hidden][hidden] — input-major (transposed at load)
     b2: Vec<f32>,
     wp: Vec<f32>, // [NUM_ACTIONS][hidden]
     bp: Vec<f32>,
@@ -36,7 +36,57 @@ impl NetScratch {
 }
 
 fn dot(a: &[f32], b: &[f32]) -> f32 {
-    a.iter().zip(b).map(|(x, y)| x * y).sum()
+    // A strict left-to-right f32 sum can't be vectorized (float addition is
+    // not associative), so accumulate into 16 independent lanes; LLVM keeps
+    // them in vector registers and reduces once at the end.
+    let mut acc = [0.0f32; 16];
+    let mut ca = a.chunks_exact(16);
+    let mut cb = b.chunks_exact(16);
+    for (xs, ys) in ca.by_ref().zip(cb.by_ref()) {
+        for l in 0..16 {
+            acc[l] += xs[l] * ys[l];
+        }
+    }
+    let tail: f32 = ca.remainder().iter().zip(cb.remainder()).map(|(x, y)| x * y).sum();
+    acc.iter().sum::<f32>() + tail
+}
+
+/// `h[o] += xv * col[o]` for all o. No reduction across lanes, so this
+/// vectorizes fully; it is the whole inner loop of the trunk.
+fn axpy(h: &mut [f32], xv: f32, col: &[f32]) {
+    for (ho, &w) in h.iter_mut().zip(col) {
+        *ho += xv * w;
+    }
+}
+
+/// `out = relu(Wt' x + bias)` with `wt` stored input-major: column `i`
+/// (the weights of input `i` across all outputs) is contiguous. Zero
+/// inputs contribute exactly nothing, so they are skipped outright —
+/// obs is ~90% zeros (one-hot encodings) and ReLU zeroes about half of
+/// h1, which saves the matching share of weight traffic and multiplies.
+fn matvec_t_relu(wt: &[f32], x: &[f32], bias: &[f32], out: &mut [f32]) {
+    let n = out.len();
+    debug_assert_eq!(wt.len(), x.len() * n);
+    out.copy_from_slice(bias);
+    for (i, &xv) in x.iter().enumerate() {
+        if xv != 0.0 {
+            axpy(out, xv, &wt[i * n..(i + 1) * n]);
+        }
+    }
+    for h in out.iter_mut() {
+        *h = h.max(0.0);
+    }
+}
+
+/// Row-major `[rows][cols]` -> input-major `[cols][rows]`.
+fn transpose(w: &[f32], rows: usize, cols: usize) -> Vec<f32> {
+    let mut out = vec![0.0f32; w.len()];
+    for r in 0..rows {
+        for c in 0..cols {
+            out[c * rows + r] = w[r * cols + c];
+        }
+    }
+    out
 }
 
 fn read_f32s(bytes: &[u8], off: &mut usize, n: usize) -> Vec<f32> {
@@ -63,9 +113,9 @@ impl MlpNet {
         let mut off = 20;
         let net = MlpNet {
             hidden,
-            w1: read_f32s(&bytes, &mut off, hidden * OBS_DIM),
+            w1t: transpose(&read_f32s(&bytes, &mut off, hidden * OBS_DIM), hidden, OBS_DIM),
             b1: read_f32s(&bytes, &mut off, hidden),
-            w2: read_f32s(&bytes, &mut off, hidden * hidden),
+            w2t: transpose(&read_f32s(&bytes, &mut off, hidden * hidden), hidden, hidden),
             b2: read_f32s(&bytes, &mut off, hidden),
             wp: read_f32s(&bytes, &mut off, NUM_ACTIONS * hidden),
             bp: read_f32s(&bytes, &mut off, NUM_ACTIONS),
@@ -95,15 +145,8 @@ impl MlpNet {
     /// Run the shared trunk; results live in `scratch` for the heads below.
     pub fn trunk(&self, obs: &[f32], scratch: &mut NetScratch) {
         debug_assert_eq!(obs.len(), OBS_DIM);
-        for o in 0..self.hidden {
-            let z = dot(&self.w1[o * OBS_DIM..(o + 1) * OBS_DIM], obs) + self.b1[o];
-            scratch.h1[o] = z.max(0.0);
-        }
-        for o in 0..self.hidden {
-            let z = dot(&self.w2[o * self.hidden..(o + 1) * self.hidden], &scratch.h1)
-                + self.b2[o];
-            scratch.h2[o] = z.max(0.0);
-        }
+        matvec_t_relu(&self.w1t, obs, &self.b1, &mut scratch.h1);
+        matvec_t_relu(&self.w2t, &scratch.h1, &self.b2, &mut scratch.h2);
     }
 
     /// Value head (expected terminal reward for the acting seat, ~[-1, 1]).

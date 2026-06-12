@@ -398,12 +398,24 @@ programmed directly through "intrinsics", which are per-architecture,
 near-assembly function calls. For raw matrix-multiply throughput that is
 often worthwhile. We declined, for three reasons:
 
-1. The compiler already produces SIMD when the data layout allows it.
-   LLVM auto-vectorizes simple loops over contiguous arrays, so the dot
-   products in the net inference and the array sweeps compile to vector
-   instructions on their own. The prerequisite is layout (fixed
-   contiguous arrays, no pointer chasing), which is idea 1. Get the
-   layout right and the SIMD comes free.
+1. The compiler produces SIMD when the loop has the right *shape* — and
+   the right shape is not automatic. We originally assumed the dot
+   products in net inference would auto-vectorize because the layout was
+   contiguous; checking the release assembly showed they did not. Float
+   addition is not associative, a vectorized sum reorders the additions,
+   and Rust exposes no fast-math, so LLVM kept the running sum in a
+   strict serial chain of scalar adds — and that chain set the pace
+   (~430 us per forward pass at hidden 512). The fix was still not
+   intrinsics but restructuring: store the weight matrices input-major
+   (transposed), so the inner loop becomes "for each nonzero input, add
+   `x[i]` times its weight column to the whole hidden vector". That loop
+   has no reduction — every output lane is independent — so it compiles
+   to plain NEON/AVX on its own. And since a zero input contributes
+   exactly nothing, the one-hot observation (~90% zeros) and the
+   ReLU-sparsified hidden layer skip most columns outright — the same
+   trick chess engines use for NNUE inference. Forward passes went from
+   429 us to 14 us (30x) in safe, portable Rust. Reproduce with:
+   `cargo run -p catan-env --release --example netbench -- ../models/catan-512.ctnn`.
 2. The remaining hot paths do not vectorize. Rule logic is branchy ("if
    the robber is here and that player has cards and..."), and SIMD
    requires all lanes to take the same path.
@@ -415,10 +427,11 @@ often worthwhile. We declined, for three reasons:
    technique from computer chess, and it is the main reason the engine
    reaches vector-class speed while staying portable and readable.
 
-Intrinsics might buy another 2x on net inference, at the cost of
-per-architecture code paths and a maintenance burden, and the batched
-path is already memory-bandwidth-bound, where extra compute buys
-nothing.
+Intrinsics could still shave something off net inference (fused
+multiply-add, wider unrolling), at the cost of per-architecture code
+paths and a maintenance burden — but the sparse column path is mostly
+bound by streaming the touched weight columns from memory, where extra
+compute buys little.
 
 **No `unsafe`.** Rust allows opting out of bounds and aliasing checks
 inside `unsafe` blocks, and skipping bounds checks in inner loops is
