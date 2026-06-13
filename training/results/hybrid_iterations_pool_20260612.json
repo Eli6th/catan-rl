@@ -1,0 +1,109 @@
+{
+  "games_per_opponent": 96,
+  "seeds": [
+    39400000,
+    39500000,
+    39600000
+  ],
+  "results": [
+    {
+      "net": "training/runs/20260612-hybrid-signed-v2-focus/iteration_04.ctnn",
+      "rates": {
+        "heuristic": 0.8333333333333334,
+        "heuristic_v2": 0.8333333333333334
+      },
+      "worst_rate": 0.8333333333333334,
+      "mean_rate": 0.8333333333333334
+    },
+    {
+      "net": "training/runs/20260612-hybrid-aligned-v1/iteration_01.ctnn",
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.8333333333333334
+      },
+      "worst_rate": 0.8229166666666666,
+      "mean_rate": 0.828125
+    },
+    {
+      "net": "training/runs/20260612-2244-h2-policy-head-continuation-5m/screening/base.ctnn",
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.8229166666666666
+      },
+      "worst_rate": 0.8229166666666666,
+      "mean_rate": 0.8229166666666666
+    },
+    {
+      "net": "training/runs/20260612-hybrid-aligned-v1/iteration_02.ctnn",
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.8229166666666666
+      },
+      "worst_rate": 0.8229166666666666,
+      "mean_rate": 0.8229166666666666
+    },
+    {
+      "net": "training/runs/20260612-hybrid-signed-v2-focus/iteration_00.ctnn",
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.8229166666666666
+      },
+      "worst_rate": 0.8229166666666666,
+      "mean_rate": 0.8229166666666666
+    },
+    {
+      "net": "training/runs/20260612-hybrid-signed-v2-focus/iteration_02.ctnn",
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.8229166666666666
+      },
+      "worst_rate": 0.8229166666666666,
+      "mean_rate": 0.8229166666666666
+    },
+    {
+      "net": "training/runs/20260612-hybrid-signed-v2-focus/iteration_03.ctnn",
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.8229166666666666
+      },
+      "worst_rate": 0.8229166666666666,
+      "mean_rate": 0.8229166666666666
+    },
+    {
+      "net": "training/runs/20260612-hybrid-signed-v2-focus/iteration_01.ctnn",
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.8125,
+      "mean_rate": 0.8177083333333333
+    },
+    {
+      "net": "training/runs/20260612-hybrid-aligned-v1/iteration_00.ctnn",
+      "rates": {
+        "heuristic": 0.7916666666666666,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.7916666666666666,
+      "mean_rate": 0.796875
+    },
+    {
+      "net": "training/runs/20260612-hybrid-aligned-v1/iteration_03.ctnn",
+      "rates": {
+        "heuristic": 0.8333333333333334,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.8072916666666667
+    },
+    {
+      "net": "training/runs/20260612-hybrid-aligned-v1/iteration_04.ctnn",
+      "rates": {
+        "heuristic": 0.8125,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.796875
+    }
+  ]
+}

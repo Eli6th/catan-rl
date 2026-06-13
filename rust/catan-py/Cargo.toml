@@ -12,6 +12,7 @@ catan-core = { path = "../catan-core" }
 catan-env = { path = "../catan-env" }
 pyo3 = { version = "0.22", features = ["extension-module"] }
 numpy = "0.22"
+rayon = "1"
 
 [profile.release]
 lto = true

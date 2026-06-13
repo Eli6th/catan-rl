@@ -38,6 +38,7 @@ pub fn play_game(game: &mut CatanGame, players: &mut [Box<dyn Player>]) -> i8 {
     winner
 }
 
+#[derive(Clone)]
 pub struct RandomPlayer {
     rng: SmallRng,
 }
@@ -128,13 +129,22 @@ impl Default for HeuristicParams {
 
 impl HeuristicParams {
     pub fn to_array(self) -> [f32; 6] {
-        [self.diversity_bonus, self.port_bonus, self.robber_steal_bonus,
-         self.robber_self_penalty, self.steal_cards_weight, self.trade_accept_threshold]
+        [
+            self.diversity_bonus,
+            self.port_bonus,
+            self.robber_steal_bonus,
+            self.robber_self_penalty,
+            self.steal_cards_weight,
+            self.trade_accept_threshold,
+        ]
     }
     pub fn from_array(a: [f32; 6]) -> Self {
         HeuristicParams {
-            diversity_bonus: a[0], port_bonus: a[1], robber_steal_bonus: a[2],
-            robber_self_penalty: a[3], steal_cards_weight: a[4],
+            diversity_bonus: a[0],
+            port_bonus: a[1],
+            robber_steal_bonus: a[2],
+            robber_self_penalty: a[3],
+            steal_cards_weight: a[4],
             trade_accept_threshold: a[5],
         }
     }
@@ -152,6 +162,7 @@ pub const HEURISTIC_V2_PARAMS: HeuristicParams = HeuristicParams {
     trade_accept_threshold: 2.810_156_3,
 };
 
+#[derive(Clone)]
 pub struct HeuristicPlayer {
     rng: SmallRng,
     params: HeuristicParams,
@@ -202,7 +213,7 @@ impl HeuristicPlayer {
         prob_score + diversity_bonus + port_bonus
     }
 
-    fn score(&self, game: &CatanGame, action: &Action) -> f32 {
+    pub fn score_action(&self, game: &CatanGame, action: &Action) -> f32 {
         let state = &game.state;
         match *action {
             Action::PlaceInitialSettlement { vertex, .. }
@@ -289,7 +300,7 @@ impl Player for HeuristicPlayer {
             } else {
                 continue;
             }
-            let s = self.score(game, action);
+            let s = self.score_action(game, action);
             if s > tier_best_score {
                 tier_best_score = s;
                 tier_best = Some(*action);
@@ -338,6 +349,7 @@ impl Player for HeuristicPlayer {
 /// Dice and branching are non-issues — the simulations just roll them.
 /// Trade proposals are excluded as candidates (like the heuristic, it never
 /// initiates negotiation; it does evaluate responses).
+#[derive(Clone)]
 pub struct RolloutBot {
     rng: SmallRng,
     pub rollouts: usize,

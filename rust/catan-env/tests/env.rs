@@ -5,7 +5,9 @@
 use rand::rngs::SmallRng;
 use rand::{Rng, SeedableRng};
 
-use catan_env::{CatanEnv, EnvConfig, RewardConfig, VecCatanEnv, NUM_ACTIONS, OBS_DIM};
+use catan_env::{
+    CatanEnv, EnvConfig, RewardConfig, SeatKind, VecCatanEnv, Visibility, NUM_ACTIONS, OBS_DIM,
+};
 
 fn pick_masked(rng: &mut SmallRng, mask: &[bool]) -> usize {
     let legal: Vec<usize> = (0..NUM_ACTIONS).filter(|&i| mask[i]).collect();
@@ -14,6 +16,14 @@ fn pick_masked(rng: &mut SmallRng, mask: &[bool]) -> usize {
         "no legal actions on a live decision point"
     );
     legal[rng.gen_range(0..legal.len())]
+}
+
+#[test]
+fn episode_seed_tracks_resets() {
+    let mut env = CatanEnv::new(EnvConfig::default(), 11);
+    assert_eq!(env.episode_seed(), 11);
+    env.reset(29);
+    assert_eq!(env.episode_seed(), 29);
 }
 
 /// Play one full episode with a masked random policy; returns
@@ -103,11 +113,12 @@ fn shaped_rewards_account_exactly_for_final_vp() {
             win: 0.0,
             loss: 0.0,
             vp_delta: 0.1,
+            ..RewardConfig::default()
         },
         ..EnvConfig::default()
     };
     for seed in [2u64, 8] {
-        let mut env = CatanEnv::new(config, seed);
+        let mut env = CatanEnv::new(config.clone(), seed);
         let (_, delivered, _, vps) = run_episode(&mut env, seed);
         for p in 0..4 {
             let expected = 0.1 * vps[p] as f32;
@@ -116,6 +127,50 @@ fn shaped_rewards_account_exactly_for_final_vp() {
                 "seed {seed} seat {p}: delivered {} != 0.1 * {} VP",
                 delivered[p],
                 vps[p]
+            );
+        }
+    }
+}
+
+#[test]
+fn zero_sum_terminal_rewards_balance() {
+    let config = EnvConfig {
+        reward: RewardConfig {
+            zero_sum: true,
+            ..RewardConfig::default()
+        },
+        ..EnvConfig::default()
+    };
+    let mut env = CatanEnv::new(config, 23);
+    let (winner, delivered, _, _) = run_episode(&mut env, 23);
+    assert!(winner >= 0);
+    assert!((delivered.iter().sum::<f32>()).abs() < 1e-5);
+    assert_eq!(delivered[winner as usize], 1.0);
+    for (p, &reward) in delivered.iter().enumerate() {
+        if p != winner as usize {
+            assert!((reward + 1.0 / 3.0).abs() < 1e-5);
+        }
+    }
+}
+
+#[test]
+fn potential_shaping_telescopes_without_changing_episode_return() {
+    let config = EnvConfig {
+        reward: RewardConfig {
+            win: 0.0,
+            loss: 0.0,
+            potential_scale: 0.25,
+            ..RewardConfig::default()
+        },
+        ..EnvConfig::default()
+    };
+    for seed in [31u64, 37] {
+        let mut env = CatanEnv::new(config.clone(), seed);
+        let (_, delivered, _, _) = run_episode(&mut env, seed);
+        for (p, reward) in delivered.iter().enumerate() {
+            assert!(
+                reward.abs() < 1e-4,
+                "seed {seed} seat {p}: shaping return did not telescope: {reward}"
             );
         }
     }
@@ -145,6 +200,39 @@ fn same_seed_same_episode() {
         run(42),
         run(42),
         "identical seeds + policy must reproduce the episode"
+    );
+}
+
+#[test]
+fn search_sample_preserves_observer_information() {
+    let config = EnvConfig {
+        visibility: Visibility::Realistic,
+        seat_kinds: [
+            SeatKind::Policy,
+            SeatKind::HeuristicBot,
+            SeatKind::HeuristicBot,
+            SeatKind::HeuristicBot,
+        ],
+        ..EnvConfig::default()
+    };
+    let env = CatanEnv::new(config, 4_242);
+    let observer = env.current_seat();
+    let sample = env.search_sample(observer, 7_777);
+    assert_eq!(
+        sample.game().state.resources[observer],
+        env.game().state.resources[observer]
+    );
+    assert_eq!(
+        sample.game().state.tile_resources,
+        env.game().state.tile_resources
+    );
+    assert_eq!(
+        sample.game().state.tile_numbers,
+        env.game().state.tile_numbers
+    );
+    assert_eq!(
+        sample.game().state.current_player,
+        env.game().state.current_player
     );
 }
 
@@ -209,17 +297,21 @@ fn vec_env_steps_batches_and_auto_resets() {
             &mut dones,
             &mut terminals,
         );
+        let road_targets = venv.terminal_road_targets();
         for i in 0..N {
             assert!((seats[i] as usize) < 4);
             if dones[i] {
                 finished_episodes += 1;
                 terminal_sum += terminals[i * 4..i * 4 + 4].iter().sum::<f32>();
+                assert_eq!(road_targets[i].iter().sum::<f32>(), 1.0);
                 // Auto-reset: the obs/mask already belong to a fresh episode.
                 let legal = masks[i * NUM_ACTIONS..(i + 1) * NUM_ACTIONS]
                     .iter()
                     .filter(|&&m| m)
                     .count();
                 assert!(legal >= 2, "post-reset mask must be live");
+            } else {
+                assert_eq!(road_targets[i], [0.0; 5]);
             }
         }
         if finished_episodes >= 12 && step > 100 {

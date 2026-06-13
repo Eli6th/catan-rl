@@ -1,0 +1,81 @@
+{
+  "opponent": "heuristic_v2",
+  "games": 96,
+  "seeds": [
+    40300000,
+    40400000,
+    40500000
+  ],
+  "results": [
+    {
+      "name": "f32_s0",
+      "first_samples": 32,
+      "second_samples": 0,
+      "wins": 83,
+      "rate": 0.8645833333333334
+    },
+    {
+      "name": "f64_s32",
+      "first_samples": 64,
+      "second_samples": 32,
+      "wins": 83,
+      "rate": 0.8645833333333334
+    },
+    {
+      "name": "f64_s16",
+      "first_samples": 64,
+      "second_samples": 16,
+      "wins": 82,
+      "rate": 0.8541666666666666
+    },
+    {
+      "name": "f32_s4",
+      "first_samples": 32,
+      "second_samples": 4,
+      "wins": 81,
+      "rate": 0.84375
+    },
+    {
+      "name": "f32_s8",
+      "first_samples": 32,
+      "second_samples": 8,
+      "wins": 81,
+      "rate": 0.84375
+    },
+    {
+      "name": "f64_s8",
+      "first_samples": 64,
+      "second_samples": 8,
+      "wins": 81,
+      "rate": 0.84375
+    },
+    {
+      "name": "f32_s16",
+      "first_samples": 32,
+      "second_samples": 16,
+      "wins": 79,
+      "rate": 0.8229166666666666
+    },
+    {
+      "name": "f32_s32",
+      "first_samples": 32,
+      "second_samples": 32,
+      "wins": 79,
+      "rate": 0.8229166666666666
+    },
+    {
+      "name": "f64_s4",
+      "first_samples": 64,
+      "second_samples": 4,
+      "wins": 78,
+      "rate": 0.8125
+    },
+    {
+      "name": "control",
+      "first_samples": 0,
+      "second_samples": 0,
+      "wins": 67,
+      "rate": 0.6979166666666666
+    }
+  ]
+}

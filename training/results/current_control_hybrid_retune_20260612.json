@@ -1,0 +1,1099 @@
+{
+  "net": "training/runs/20260612-hybrid-value-calibration/iteration_01.ctnn",
+  "games_per_opponent": 96,
+  "seeds": [
+    38300000,
+    38400000,
+    38500000
+  ],
+  "results": [
+    {
+      "config": {
+        "strategy_settlement_weight": 2.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 5.0,
+        "road_settlement_weight": 40.0,
+        "immediate_vp_min": 5,
+        "conversion_min_vp": 4,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.84375,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8229166666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 2.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 1.0,
+        "road_settlement_weight": 20.0,
+        "immediate_vp_min": 5,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.8333333333333334,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8177083333333334
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 2.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 5.0,
+        "road_settlement_weight": 5.0,
+        "immediate_vp_min": 5,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.8333333333333334,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8177083333333334
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 3.0,
+        "opening_production_weight": 0.5,
+        "road_length_weight": 20.0,
+        "road_settlement_weight": 20.0,
+        "immediate_vp_min": 2,
+        "conversion_min_vp": 4,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.8020833333333334,
+        "heuristic_v2": 0.8229166666666666
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8125
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 5.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 1.0,
+        "road_settlement_weight": 5.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 4,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.7916666666666666,
+        "heuristic_v2": 0.8333333333333334
+      },
+      "worst_rate": 0.7916666666666666,
+      "mean_rate": 0.8125
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 8.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 10.0,
+        "road_settlement_weight": 20.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 4,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.8020833333333334,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7916666666666666,
+      "mean_rate": 0.796875
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 2.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 5.0,
+        "road_settlement_weight": 10.0,
+        "immediate_vp_min": 2,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.8020833333333333
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 3.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 1.0,
+        "road_settlement_weight": 40.0,
+        "immediate_vp_min": 5,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.8020833333333333
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 5.0,
+        "opening_production_weight": 0.5,
+        "road_length_weight": 2.0,
+        "road_settlement_weight": 10.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 4,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.78125,
+        "heuristic_v2": 0.8229166666666666
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.8020833333333333
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 2.0,
+        "opening_production_weight": 0.0,
+        "road_length_weight": 10.0,
+        "road_settlement_weight": 20.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.7708333333333334,
+        "heuristic_v2": 0.8541666666666666
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.8125
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 8.0,
+        "opening_production_weight": 4.0,
+        "road_length_weight": 0.5,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.8125
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 12.0,
+        "opening_production_weight": 4.0,
+        "road_length_weight": 5.0,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 5,
+        "conversion_min_vp": 4,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.8020833333333334,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.7864583333333334
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 5.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 0.5,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.7604166666666666,
+        "heuristic_v2": 0.8541666666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.8072916666666666
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 3.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 5.0,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 4,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.8333333333333334,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.796875
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 1.0,
+        "opening_production_weight": 0.5,
+        "road_length_weight": 0.5,
+        "road_settlement_weight": 10.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 4,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.7916666666666666
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 3.0,
+        "opening_production_weight": 0.25,
+        "road_length_weight": 5.0,
+        "road_settlement_weight": 5.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.7604166666666666,
+        "heuristic_v2": 0.8229166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.7916666666666666
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 1.0,
+        "opening_production_weight": 0.5,
+        "road_length_weight": 10.0,
+        "road_settlement_weight": 5.0,
+        "immediate_vp_min": 5,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.8020833333333334,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.78125
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 8.0,
+        "opening_production_weight": 2.0,
+        "road_length_weight": 20.0,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.7604166666666666,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.7760416666666666
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 3.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 20.0,
+        "road_settlement_weight": 5.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.78125,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.7708333333333333
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 2.0,
+        "opening_production_weight": 0.0,
+        "road_length_weight": 1.0,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 2,
+        "conversion_min_vp": 4,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.7708333333333334,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.765625
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 1.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 20.0,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.75
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.8072916666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 3.0,
+        "opening_production_weight": 0.0,
+        "road_length_weight": 5.0,
+        "road_settlement_weight": 10.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.75,
+        "heuristic_v2": 0.8333333333333334
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.7916666666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 2.0,
+        "opening_production_weight": 2.0,
+        "road_length_weight": 1.0,
+        "road_settlement_weight": 5.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.75
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.7864583333333333
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 3.0,
+        "opening_production_weight": 0.5,
+        "road_length_weight": 0.5,
+        "road_settlement_weight": 5.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.75,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.7760416666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 3.0,
+        "opening_production_weight": 0.0,
+        "road_length_weight": 0.5,
+        "road_settlement_weight": 20.0,
+        "immediate_vp_min": 2,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.75,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.7708333333333333
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 8.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 0.5,
+        "road_settlement_weight": 5.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.75,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.7708333333333333
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 3.0,
+        "opening_production_weight": 2.0,
+        "road_length_weight": 2.0,
+        "road_settlement_weight": 10.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 4,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.84375,
+        "heuristic_v2": 0.7395833333333334
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.7916666666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 1.0,
+        "opening_production_weight": 0.25,
+        "road_length_weight": 10.0,
+        "road_settlement_weight": 20.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 4,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.8333333333333334,
+        "heuristic_v2": 0.7395833333333334
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.7864583333333334
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 8.0,
+        "opening_production_weight": 0.0,
+        "road_length_weight": 10.0,
+        "road_settlement_weight": 40.0,
+        "immediate_vp_min": 5,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.7395833333333334,
+        "heuristic_v2": 0.8229166666666666
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.78125
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 2.0,
+        "opening_production_weight": 4.0,
+        "road_length_weight": 2.0,
+        "road_settlement_weight": 10.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.8125,
+        "heuristic_v2": 0.7395833333333334
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.7760416666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 5.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 0.5,
+        "road_settlement_weight": 40.0,
+        "immediate_vp_min": 5,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.7395833333333334,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.7760416666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 8.0,
+        "opening_production_weight": 0.5,
+        "road_length_weight": 10.0,
+        "road_settlement_weight": 40.0,
+        "immediate_vp_min": 2,
+        "conversion_min_vp": 4,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.7395833333333334,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.7760416666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 8.0,
+        "opening_production_weight": 0.5,
+        "road_length_weight": 20.0,
+        "road_settlement_weight": 40.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 4,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.7395833333333334,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.7760416666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 12.0,
+        "opening_production_weight": 2.0,
+        "road_length_weight": 1.0,
+        "road_settlement_weight": 20.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.7395833333333334,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.7552083333333334
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 5.0,
+        "opening_production_weight": 0.25,
+        "road_length_weight": 1.0,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 2,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.7395833333333334,
+        "heuristic_v2": 0.75
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.7447916666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 5.0,
+        "opening_production_weight": 0.25,
+        "road_length_weight": 10.0,
+        "road_settlement_weight": 20.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.7291666666666666,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.7291666666666666,
+      "mean_rate": 0.765625
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 8.0,
+        "opening_production_weight": 4.0,
+        "road_length_weight": 0.5,
+        "road_settlement_weight": 5.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.75,
+        "heuristic_v2": 0.7291666666666666
+      },
+      "worst_rate": 0.7291666666666666,
+      "mean_rate": 0.7395833333333333
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 8.0,
+        "opening_production_weight": 0.0,
+        "road_length_weight": 0.5,
+        "road_settlement_weight": 40.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.71875,
+        "heuristic_v2": 0.84375
+      },
+      "worst_rate": 0.71875,
+      "mean_rate": 0.78125
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 2.0,
+        "opening_production_weight": 4.0,
+        "road_length_weight": 1.0,
+        "road_settlement_weight": 10.0,
+        "immediate_vp_min": 5,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.8333333333333334,
+        "heuristic_v2": 0.71875
+      },
+      "worst_rate": 0.71875,
+      "mean_rate": 0.7760416666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 1.0,
+        "opening_production_weight": 2.0,
+        "road_length_weight": 10.0,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.71875
+      },
+      "worst_rate": 0.71875,
+      "mean_rate": 0.7708333333333333
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 5.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 5.0,
+        "road_settlement_weight": 20.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.71875,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.71875,
+      "mean_rate": 0.7604166666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 8.0,
+        "opening_production_weight": 0.25,
+        "road_length_weight": 2.0,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 4,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.71875,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.71875,
+      "mean_rate": 0.7604166666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 1.0,
+        "opening_production_weight": 0.25,
+        "road_length_weight": 5.0,
+        "road_settlement_weight": 20.0,
+        "immediate_vp_min": 2,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.71875,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.71875,
+      "mean_rate": 0.7552083333333333
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 0.0,
+        "opening_production_weight": 0.5,
+        "road_length_weight": 5.0,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 4,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.7708333333333334,
+        "heuristic_v2": 0.71875
+      },
+      "worst_rate": 0.71875,
+      "mean_rate": 0.7447916666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 1.0,
+        "opening_production_weight": 0.0,
+        "road_length_weight": 1.0,
+        "road_settlement_weight": 5.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.71875,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.71875,
+      "mean_rate": 0.7447916666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 8.0,
+        "opening_production_weight": 0.0,
+        "road_length_weight": 20.0,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 2,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.71875,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.71875,
+      "mean_rate": 0.7447916666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 2.0,
+        "opening_production_weight": 2.0,
+        "road_length_weight": 0.5,
+        "road_settlement_weight": 10.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.7916666666666666,
+        "heuristic_v2": 0.7083333333333334
+      },
+      "worst_rate": 0.7083333333333334,
+      "mean_rate": 0.75
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 8.0,
+        "opening_production_weight": 0.0,
+        "road_length_weight": 2.0,
+        "road_settlement_weight": 5.0,
+        "immediate_vp_min": 2,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.7083333333333334,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7083333333333334,
+      "mean_rate": 0.75
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 8.0,
+        "opening_production_weight": 0.5,
+        "road_length_weight": 0.5,
+        "road_settlement_weight": 20.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.7083333333333334,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7083333333333334,
+      "mean_rate": 0.75
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 8.0,
+        "opening_production_weight": 0.5,
+        "road_length_weight": 2.0,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.7083333333333334,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7083333333333334,
+      "mean_rate": 0.75
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 2.0,
+        "opening_production_weight": 2.0,
+        "road_length_weight": 20.0,
+        "road_settlement_weight": 40.0,
+        "immediate_vp_min": 2,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.7708333333333334,
+        "heuristic_v2": 0.7083333333333334
+      },
+      "worst_rate": 0.7083333333333334,
+      "mean_rate": 0.7395833333333334
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 2.0,
+        "opening_production_weight": 4.0,
+        "road_length_weight": 1.0,
+        "road_settlement_weight": 20.0,
+        "immediate_vp_min": 2,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.7708333333333334,
+        "heuristic_v2": 0.7083333333333334
+      },
+      "worst_rate": 0.7083333333333334,
+      "mean_rate": 0.7395833333333334
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 12.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 1.0,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.7083333333333334,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7083333333333334,
+      "mean_rate": 0.734375
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 12.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 1.0,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 2,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.7083333333333334,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7083333333333334,
+      "mean_rate": 0.734375
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 5.0,
+        "opening_production_weight": 0.0,
+        "road_length_weight": 0.5,
+        "road_settlement_weight": 5.0,
+        "immediate_vp_min": 2,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.7083333333333334,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7083333333333334,
+      "mean_rate": 0.734375
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 8.0,
+        "opening_production_weight": 0.5,
+        "road_length_weight": 1.0,
+        "road_settlement_weight": 40.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.7083333333333334,
+        "heuristic_v2": 0.75
+      },
+      "worst_rate": 0.7083333333333334,
+      "mean_rate": 0.7291666666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 0.0,
+        "opening_production_weight": 0.25,
+        "road_length_weight": 10.0,
+        "road_settlement_weight": 40.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.7604166666666666,
+        "heuristic_v2": 0.6875
+      },
+      "worst_rate": 0.6875,
+      "mean_rate": 0.7239583333333333
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 0.0,
+        "opening_production_weight": 2.0,
+        "road_length_weight": 5.0,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 4,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.7916666666666666,
+        "heuristic_v2": 0.6770833333333334
+      },
+      "worst_rate": 0.6770833333333334,
+      "mean_rate": 0.734375
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 0.0,
+        "opening_production_weight": 0.5,
+        "road_length_weight": 10.0,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 2,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.75,
+        "heuristic_v2": 0.6666666666666666
+      },
+      "worst_rate": 0.6666666666666666,
+      "mean_rate": 0.7083333333333333
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 0.0,
+        "opening_production_weight": 0.25,
+        "road_length_weight": 5.0,
+        "road_settlement_weight": 10.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 4,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.65625
+      },
+      "worst_rate": 0.65625,
+      "mean_rate": 0.7395833333333333
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 0.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 20.0,
+        "road_settlement_weight": 40.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 4
+      },
+      "rates": {
+        "heuristic": 0.75,
+        "heuristic_v2": 0.6458333333333334
+      },
+      "worst_rate": 0.6458333333333334,
+      "mean_rate": 0.6979166666666667
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 0.0,
+        "opening_production_weight": 2.0,
+        "road_length_weight": 10.0,
+        "road_settlement_weight": 5.0,
+        "immediate_vp_min": 4,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.8020833333333334,
+        "heuristic_v2": 0.6354166666666666
+      },
+      "worst_rate": 0.6354166666666666,
+      "mean_rate": 0.71875
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 0.0,
+        "opening_production_weight": 2.0,
+        "road_length_weight": 10.0,
+        "road_settlement_weight": 20.0,
+        "immediate_vp_min": 5,
+        "conversion_min_vp": 5,
+        "proposal_conversion_min_vp": 6
+      },
+      "rates": {
+        "heuristic": 0.7916666666666666,
+        "heuristic_v2": 0.6145833333333334
+      },
+      "worst_rate": 0.6145833333333334,
+      "mean_rate": 0.703125
+    },
+    {
+      "config": {
+        "strategy_settlement_weight": 0.0,
+        "opening_production_weight": 1.0,
+        "road_length_weight": 10.0,
+        "road_settlement_weight": 2.0,
+        "immediate_vp_min": 0,
+        "conversion_min_vp": 6,
+        "proposal_conversion_min_vp": 5
+      },
+      "rates": {
+        "heuristic": 0.7395833333333334,
+        "heuristic_v2": 0.6041666666666666
+      },
+      "worst_rate": 0.6041666666666666,
+      "mean_rate": 0.671875
+    }
+  ]
+}

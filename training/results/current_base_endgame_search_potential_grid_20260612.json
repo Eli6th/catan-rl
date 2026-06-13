@@ -1,0 +1,266 @@
+{
+  "net": "training/runs/20260612-2244-h2-policy-head-continuation-5m/screening/base.ctnn",
+  "games_per_opponent": 48,
+  "seeds": [
+    37600000,
+    37700000,
+    37800000
+  ],
+  "results": [
+    {
+      "config": {
+        "name": "vp5_8x8_c2",
+        "root_k": 8,
+        "samples": 8,
+        "continuation": 2,
+        "min_vp": 5,
+        "value_weight": 1.0,
+        "potential_weight": 0.0
+      },
+      "rates": {
+        "heuristic": 0.9166666666666666,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.8125,
+      "mean_rate": 0.8645833333333333
+    },
+    {
+      "config": {
+        "name": "vp6_4x8_c2",
+        "root_k": 4,
+        "samples": 8,
+        "continuation": 2,
+        "min_vp": 6,
+        "value_weight": 1.0,
+        "potential_weight": 0.0
+      },
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.8125,
+      "mean_rate": 0.8541666666666667
+    },
+    {
+      "config": {
+        "name": "vp6_4x4_c1_pure_potential",
+        "root_k": 4,
+        "samples": 4,
+        "continuation": 1,
+        "min_vp": 6,
+        "value_weight": 0.0,
+        "potential_weight": 1.0
+      },
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7916666666666666,
+      "mean_rate": 0.84375
+    },
+    {
+      "config": {
+        "name": "vp6_4x8_c1_pure_potential",
+        "root_k": 4,
+        "samples": 8,
+        "continuation": 1,
+        "min_vp": 6,
+        "value_weight": 0.0,
+        "potential_weight": 1.0
+      },
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7916666666666666,
+      "mean_rate": 0.84375
+    },
+    {
+      "config": {
+        "name": "vp6_4x8_c2_p025",
+        "root_k": 4,
+        "samples": 8,
+        "continuation": 2,
+        "min_vp": 6,
+        "value_weight": 1.0,
+        "potential_weight": 0.25
+      },
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7916666666666666,
+      "mean_rate": 0.8333333333333333
+    },
+    {
+      "config": {
+        "name": "vp6_4x8_c2_pure_potential",
+        "root_k": 4,
+        "samples": 8,
+        "continuation": 2,
+        "min_vp": 6,
+        "value_weight": 0.0,
+        "potential_weight": 1.0
+      },
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7916666666666666,
+      "mean_rate": 0.8333333333333333
+    },
+    {
+      "config": {
+        "name": "vp5_4x8_c2",
+        "root_k": 4,
+        "samples": 8,
+        "continuation": 2,
+        "min_vp": 5,
+        "value_weight": 1.0,
+        "potential_weight": 0.0
+      },
+      "rates": {
+        "heuristic": 0.8333333333333334,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7916666666666666,
+      "mean_rate": 0.8125
+    },
+    {
+      "config": {
+        "name": "greedy",
+        "root_k": 1,
+        "samples": 1,
+        "continuation": 0,
+        "min_vp": 0,
+        "value_weight": 1.0,
+        "potential_weight": 0.0
+      },
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.8229166666666667
+    },
+    {
+      "config": {
+        "name": "vp5_4x8_c1",
+        "root_k": 4,
+        "samples": 8,
+        "continuation": 1,
+        "min_vp": 5,
+        "value_weight": 1.0,
+        "potential_weight": 0.0
+      },
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.8229166666666667
+    },
+    {
+      "config": {
+        "name": "vp5_4x4_c1",
+        "root_k": 4,
+        "samples": 4,
+        "continuation": 1,
+        "min_vp": 5,
+        "value_weight": 1.0,
+        "potential_weight": 0.0
+      },
+      "rates": {
+        "heuristic": 0.8333333333333334,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.8020833333333334
+    },
+    {
+      "config": {
+        "name": "vp6_8x8_c2",
+        "root_k": 8,
+        "samples": 8,
+        "continuation": 2,
+        "min_vp": 6,
+        "value_weight": 1.0,
+        "potential_weight": 0.0
+      },
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.75
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.8229166666666667
+    },
+    {
+      "config": {
+        "name": "vp6_4x4_c1",
+        "root_k": 4,
+        "samples": 4,
+        "continuation": 1,
+        "min_vp": 6,
+        "value_weight": 1.0,
+        "potential_weight": 0.0
+      },
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.75
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.8125
+    },
+    {
+      "config": {
+        "name": "vp5_2x4_c1",
+        "root_k": 2,
+        "samples": 4,
+        "continuation": 1,
+        "min_vp": 5,
+        "value_weight": 1.0,
+        "potential_weight": 0.0
+      },
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.75
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.8020833333333333
+    },
+    {
+      "config": {
+        "name": "vp6_2x4_c1",
+        "root_k": 2,
+        "samples": 4,
+        "continuation": 1,
+        "min_vp": 6,
+        "value_weight": 1.0,
+        "potential_weight": 0.0
+      },
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.75
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.8020833333333333
+    },
+    {
+      "config": {
+        "name": "vp6_4x8_c1",
+        "root_k": 4,
+        "samples": 8,
+        "continuation": 1,
+        "min_vp": 6,
+        "value_weight": 1.0,
+        "potential_weight": 0.0
+      },
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.75
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.8020833333333333
+    }
+  ]
+}

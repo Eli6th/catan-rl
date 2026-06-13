@@ -21,13 +21,33 @@ use rand::{Rng, SeedableRng};
 use crate::codec::encode_action;
 use crate::net::{MlpNet, NetScratch};
 use crate::obs::{encode_obs, Visibility, OBS_DIM};
+use crate::search::redeterminize;
 
+#[derive(Debug, Clone, Copy)]
+pub struct AlphaConfig {
+    pub root_k: usize,
+    pub samples: usize,
+    pub depth: u32,
+}
+
+impl Default for AlphaConfig {
+    fn default() -> Self {
+        Self {
+            root_k: 8,
+            samples: 96,
+            depth: 300,
+        }
+    }
+}
+
+#[derive(Clone)]
 pub struct AlphaBot {
     net: Arc<MlpNet>,
     rng: SmallRng,
     pub root_k: usize,
     pub samples: usize,
     pub depth: u32,
+    visibility: Visibility,
     obs: Vec<f32>,
     scratch: NetScratch,
     sim_valid: Vec<Action>,
@@ -36,6 +56,17 @@ pub struct AlphaBot {
 
 impl AlphaBot {
     pub fn new(seed: u64, net: Arc<MlpNet>, root_k: usize, samples: usize, depth: u32) -> AlphaBot {
+        Self::new_with_visibility(seed, net, root_k, samples, depth, Visibility::Perfect)
+    }
+
+    pub fn new_with_visibility(
+        seed: u64,
+        net: Arc<MlpNet>,
+        root_k: usize,
+        samples: usize,
+        depth: u32,
+        visibility: Visibility,
+    ) -> AlphaBot {
         let scratch = NetScratch::new(&net);
         AlphaBot {
             net,
@@ -43,6 +74,7 @@ impl AlphaBot {
             root_k,
             samples,
             depth,
+            visibility,
             obs: vec![0.0; OBS_DIM],
             scratch,
             sim_valid: Vec::with_capacity(256),
@@ -59,6 +91,9 @@ impl AlphaBot {
     fn rollout_value(&mut self, base: &CatanGame, action: &Action, me: usize) -> f32 {
         let mut sim = base.clone();
         sim.record_history = false;
+        if self.visibility == Visibility::Realistic {
+            redeterminize(&mut sim, me, self.rng.gen());
+        }
         if !sim.execute_action(action) {
             return -1.0;
         }
@@ -91,7 +126,7 @@ impl AlphaBot {
         if sim.state.turn >= 1000 {
             return 0.0;
         }
-        encode_obs(&sim, me, Visibility::Perfect, &mut self.obs);
+        encode_obs(&sim, me, self.visibility, &mut self.obs);
         self.net.trunk(&self.obs, &mut self.scratch);
         self.net.value_from(&self.scratch)
     }
@@ -117,16 +152,20 @@ impl Player for AlphaBot {
         }
 
         // Root prior: rank candidates by policy logit, search only the top K.
-        encode_obs(game, me, Visibility::Perfect, &mut self.obs);
+        encode_obs(game, me, self.visibility, &mut self.obs);
         self.net.trunk(&self.obs, &mut self.scratch);
         self.ranked.clear();
         for &action in &candidates {
             let id = encode_action(game, &action);
-            self.ranked.push((self.net.logit_from(&self.scratch, id), action));
+            self.ranked
+                .push((self.net.logit_from(&self.scratch, id), action));
         }
         self.ranked
             .sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap_or(std::cmp::Ordering::Equal));
         let k = self.root_k.min(self.ranked.len());
+        if k == 1 {
+            return self.ranked[0].1;
+        }
 
         let searched: Vec<Action> = self.ranked[..k].iter().map(|r| r.1).collect();
         let mut best = searched[0];

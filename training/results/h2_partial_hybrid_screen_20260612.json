@@ -1,0 +1,64 @@
+{
+  "games_per_opponent": 96,
+  "seeds": [
+    29900000,
+    30000000,
+    30100000
+  ],
+  "results": [
+    {
+      "net": "training/runs/20260612-2244-h2-policy-head-continuation-5m/screening/step_1136640.ctnn",
+      "rates": {
+        "heuristic": 0.8854166666666666,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.8229166666666666
+    },
+    {
+      "net": "training/runs/20260612-2244-h2-policy-head-continuation-5m/screening/step_0299520.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.8177083333333333
+    },
+    {
+      "net": "training/runs/20260612-2244-h2-policy-head-continuation-5m/screening/step_0053760.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.75
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.8125
+    },
+    {
+      "net": "training/runs/20260612-2244-h2-policy-head-continuation-5m/screening/base.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7395833333333334
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.8072916666666667
+    },
+    {
+      "net": "training/runs/20260612-2244-h2-policy-head-continuation-5m/screening/step_0483840.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7395833333333334
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.8072916666666667
+    },
+    {
+      "net": "training/runs/20260612-2244-h2-policy-head-continuation-5m/screening/step_0514560.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7395833333333334
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.8072916666666667
+    }
+  ]
+}

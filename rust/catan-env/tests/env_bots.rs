@@ -150,7 +150,11 @@ fn bot_games_still_balance_terminal_rewards() {
             checked += 1;
             if result.winner >= 0 {
                 let sum: f32 = result.terminal_rewards.iter().sum();
-                assert!((sum + 2.0).abs() < 1e-4, "rewards {:?}", result.terminal_rewards);
+                assert!(
+                    (sum + 2.0).abs() < 1e-4,
+                    "rewards {:?}",
+                    result.terminal_rewards
+                );
             }
             env.reset(9 + checked as u64);
         }

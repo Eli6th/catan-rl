@@ -1,0 +1,161 @@
+{
+  "net": "training/runs/20260612-2244-h2-policy-head-continuation-5m/screening/base.ctnn",
+  "games_per_opponent": 96,
+  "seeds": [
+    37300000,
+    37400000,
+    37500000
+  ],
+  "results": [
+    {
+      "leader_weight": 0.5,
+      "road_weight": 0.0,
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.828125
+    },
+    {
+      "leader_weight": 1.0,
+      "road_weight": 0.0,
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.828125
+    },
+    {
+      "leader_weight": 2.0,
+      "road_weight": 0.0,
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.828125
+    },
+    {
+      "leader_weight": 0.5,
+      "road_weight": 1.0,
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.796875
+    },
+    {
+      "leader_weight": 1.0,
+      "road_weight": 0.25,
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.75
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.7864583333333333
+    },
+    {
+      "leader_weight": 2.0,
+      "road_weight": 0.5,
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.75
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.7864583333333333
+    },
+    {
+      "leader_weight": 1.0,
+      "road_weight": 1.0,
+      "rates": {
+        "heuristic": 0.8125,
+        "heuristic_v2": 0.75
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.78125
+    },
+    {
+      "leader_weight": 0.5,
+      "road_weight": 0.25,
+      "rates": {
+        "heuristic": 0.8333333333333334,
+        "heuristic_v2": 0.7395833333333334
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.7864583333333334
+    },
+    {
+      "leader_weight": 1.0,
+      "road_weight": 0.5,
+      "rates": {
+        "heuristic": 0.8333333333333334,
+        "heuristic_v2": 0.7395833333333334
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.7864583333333334
+    },
+    {
+      "leader_weight": 0.5,
+      "road_weight": 0.5,
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.7395833333333334
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.78125
+    },
+    {
+      "leader_weight": 2.0,
+      "road_weight": 0.25,
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.7395833333333334
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.78125
+    },
+    {
+      "leader_weight": 2.0,
+      "road_weight": 1.0,
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.7395833333333334
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.78125
+    },
+    {
+      "leader_weight": 0.5,
+      "road_weight": 0.1,
+      "rates": {
+        "heuristic": 0.84375,
+        "heuristic_v2": 0.7291666666666666
+      },
+      "worst_rate": 0.7291666666666666,
+      "mean_rate": 0.7864583333333333
+    },
+    {
+      "leader_weight": 1.0,
+      "road_weight": 0.1,
+      "rates": {
+        "heuristic": 0.84375,
+        "heuristic_v2": 0.7291666666666666
+      },
+      "worst_rate": 0.7291666666666666,
+      "mean_rate": 0.7864583333333333
+    },
+    {
+      "leader_weight": 2.0,
+      "road_weight": 0.1,
+      "rates": {
+        "heuristic": 0.84375,
+        "heuristic_v2": 0.7291666666666666
+      },
+      "worst_rate": 0.7291666666666666,
+      "mean_rate": 0.7864583333333333
+    }
+  ]
+}

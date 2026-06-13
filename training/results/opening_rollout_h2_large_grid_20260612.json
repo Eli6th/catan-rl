@@ -1,0 +1,67 @@
+{
+  "opponent": "heuristic_v2",
+  "games": 96,
+  "seeds": [
+    40000000,
+    40100000,
+    40200000
+  ],
+  "results": [
+    {
+      "name": "c16s16",
+      "candidates": 16,
+      "samples": 16,
+      "wins": 87,
+      "rate": 0.90625
+    },
+    {
+      "name": "c12s32",
+      "candidates": 12,
+      "samples": 32,
+      "wins": 86,
+      "rate": 0.8958333333333334
+    },
+    {
+      "name": "control",
+      "candidates": 12,
+      "samples": 0,
+      "wins": 85,
+      "rate": 0.8854166666666666
+    },
+    {
+      "name": "c16s32",
+      "candidates": 16,
+      "samples": 32,
+      "wins": 84,
+      "rate": 0.875
+    },
+    {
+      "name": "c8s32",
+      "candidates": 8,
+      "samples": 32,
+      "wins": 83,
+      "rate": 0.8645833333333334
+    },
+    {
+      "name": "c24s32",
+      "candidates": 24,
+      "samples": 32,
+      "wins": 82,
+      "rate": 0.8541666666666666
+    },
+    {
+      "name": "c24s16",
+      "candidates": 24,
+      "samples": 16,
+      "wins": 81,
+      "rate": 0.84375
+    },
+    {
+      "name": "c12s16",
+      "candidates": 12,
+      "samples": 16,
+      "wins": 80,
+      "rate": 0.8333333333333334
+    }
+  ]
+}

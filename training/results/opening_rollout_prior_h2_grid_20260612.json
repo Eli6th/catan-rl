@@ -1,0 +1,109 @@
+{
+  "opponent": "heuristic_v2",
+  "games": 96,
+  "seeds": [
+    40800000,
+    40900000,
+    41000000
+  ],
+  "results": [
+    {
+      "name": "s64_p0.01",
+      "samples": 64,
+      "prior": 0.01,
+      "wins": 84,
+      "rate": 0.875
+    },
+    {
+      "name": "s64_p0.02",
+      "samples": 64,
+      "prior": 0.02,
+      "wins": 84,
+      "rate": 0.875
+    },
+    {
+      "name": "s64_p0.05",
+      "samples": 64,
+      "prior": 0.05,
+      "wins": 84,
+      "rate": 0.875
+    },
+    {
+      "name": "s64_p0.1",
+      "samples": 64,
+      "prior": 0.1,
+      "wins": 84,
+      "rate": 0.875
+    },
+    {
+      "name": "s64_p0",
+      "samples": 64,
+      "prior": 0.0,
+      "wins": 82,
+      "rate": 0.8541666666666666
+    },
+    {
+      "name": "s64_p0.005",
+      "samples": 64,
+      "prior": 0.005,
+      "wins": 82,
+      "rate": 0.8541666666666666
+    },
+    {
+      "name": "s32_p0",
+      "samples": 32,
+      "prior": 0.0,
+      "wins": 81,
+      "rate": 0.84375
+    },
+    {
+      "name": "s32_p0.005",
+      "samples": 32,
+      "prior": 0.005,
+      "wins": 81,
+      "rate": 0.84375
+    },
+    {
+      "name": "s32_p0.01",
+      "samples": 32,
+      "prior": 0.01,
+      "wins": 81,
+      "rate": 0.84375
+    },
+    {
+      "name": "s32_p0.02",
+      "samples": 32,
+      "prior": 0.02,
+      "wins": 81,
+      "rate": 0.84375
+    },
+    {
+      "name": "s32_p0.05",
+      "samples": 32,
+      "prior": 0.05,
+      "wins": 81,
+      "rate": 0.84375
+    },
+    {
+      "name": "s32_p0.1",
+      "samples": 32,
+      "prior": 0.1,
+      "wins": 81,
+      "rate": 0.84375
+    },
+    {
+      "name": "s32_p0.2",
+      "samples": 32,
+      "prior": 0.2,
+      "wins": 81,
+      "rate": 0.84375
+    },
+    {
+      "name": "s64_p0.2",
+      "samples": 64,
+      "prior": 0.2,
+      "wins": 79,
+      "rate": 0.8229166666666666
+    }
+  ]
+}

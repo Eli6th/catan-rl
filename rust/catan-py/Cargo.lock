@@ -20,6 +20,7 @@ name = "catan-env"
 version = "0.1.0"
 dependencies = [
  "catan-core",
+ "rand",
  "rayon",
 ]
 
@@ -31,6 +32,7 @@ dependencies = [
  "catan-env",
  "numpy",
  "pyo3",
+ "rayon",
 ]
 
 [[package]]

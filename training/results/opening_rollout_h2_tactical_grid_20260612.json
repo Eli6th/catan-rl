@@ -1,0 +1,98 @@
+{
+  "games": 96,
+  "seeds": [
+    41100000,
+    41200000,
+    41300000
+  ],
+  "results": [
+    {
+      "name": "road_resource",
+      "wins": 86,
+      "rate": 0.8958333333333334,
+      "config": [
+        true,
+        false,
+        5,
+        true
+      ]
+    },
+    {
+      "name": "resource",
+      "wins": 85,
+      "rate": 0.8854166666666666,
+      "config": [
+        false,
+        false,
+        5,
+        true
+      ]
+    },
+    {
+      "name": "road_conv3",
+      "wins": 84,
+      "rate": 0.875,
+      "config": [
+        true,
+        false,
+        3,
+        false
+      ]
+    },
+    {
+      "name": "road",
+      "wins": 80,
+      "rate": 0.8333333333333334,
+      "config": [
+        true,
+        false,
+        5,
+        false
+      ]
+    },
+    {
+      "name": "base",
+      "wins": 79,
+      "rate": 0.8229166666666666,
+      "config": [
+        false,
+        false,
+        5,
+        false
+      ]
+    },
+    {
+      "name": "road_knight",
+      "wins": 79,
+      "rate": 0.8229166666666666,
+      "config": [
+        true,
+        true,
+        5,
+        false
+      ]
+    },
+    {
+      "name": "conv3",
+      "wins": 78,
+      "rate": 0.8125,
+      "config": [
+        false,
+        false,
+        3,
+        false
+      ]
+    },
+    {
+      "name": "knight",
+      "wins": 73,
+      "rate": 0.7604166666666666,
+      "config": [
+        false,
+        true,
+        5,
+        false
+      ]
+    }
+  ]
+}

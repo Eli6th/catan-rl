@@ -13,11 +13,14 @@ Watch it live: catan-web --metrics-file <metrics path> -> /dashboard
 """
 
 import argparse
+import copy
 import json
 import os
+import shutil
 import subprocess
 import time
 from collections import defaultdict
+from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
@@ -34,6 +37,38 @@ VALUE_COEF = 0.5
 MAX_GRAD_NORM = 0.5
 
 
+@dataclass(frozen=True)
+class AlphaBudget:
+    root_k: int
+    samples: int
+    depth: int
+
+
+def parse_alpha_budget_cycle(spec: str | None, args) -> list[AlphaBudget]:
+    if not spec:
+        return [
+            AlphaBudget(
+                args.train_alpha_root_k,
+                args.train_alpha_samples,
+                args.train_alpha_depth,
+            )
+        ]
+    budgets = []
+    for item in spec.split(","):
+        budget_text, _, repeat_text = item.strip().partition("x")
+        parts = budget_text.split(":")
+        if len(parts) != 3:
+            raise ValueError(
+                "alpha budget entries must be root_k:samples:depth[xrepeat]"
+            )
+        budget = AlphaBudget(*(int(part) for part in parts))
+        repeat = int(repeat_text) if repeat_text else 1
+        if budget.root_k <= 0 or budget.samples <= 0 or repeat <= 0:
+            raise ValueError("alpha root_k, samples, and repeat must be positive")
+        budgets.extend([budget] * repeat)
+    return budgets
+
+
 def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--name", default="run")
@@ -42,23 +77,87 @@ def parse_args():
     p.add_argument("--rollout", type=int, default=128)
     p.add_argument("--victory-target", type=int, default=7)
     p.add_argument("--vp-delta", type=float, default=0.05)
+    p.add_argument("--potential-scale", type=float, default=0.0)
     p.add_argument("--visibility", default="perfect")
     p.add_argument("--lr", type=float, default=2.5e-4)
     p.add_argument("--epochs", type=int, default=4)
     p.add_argument("--minibatch", type=int, default=4096)
     p.add_argument("--hidden", type=int, default=256)
     p.add_argument("--device", default="cpu")
+    p.add_argument(
+        "--policy-head-only",
+        action="store_true",
+        help="Freeze the trunk and value head; optimize only policy parameters.",
+    )
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--eval-every", type=int, default=8)
+    p.add_argument("--eval-episodes", type=int, default=96)
+    p.add_argument("--final-eval-episodes", type=int, default=192)
+    p.add_argument(
+        "--eval-opponents",
+        default="random,heuristic",
+        help="Comma-separated engine opponents: random, heuristic, heuristic_v2, alpha.",
+    )
     p.add_argument("--metrics", default=None, help="metrics JSONL path override")
     p.add_argument("--resume", default=None, help="checkpoint to warm-start from")
+    p.add_argument(
+        "--reset-optimizer",
+        action="store_true",
+        help="Warm-start model weights without restoring optimizer state.",
+    )
     p.add_argument("--entropy-coef", type=float, default=DEFAULT_ENTROPY_COEF)
+    p.add_argument(
+        "--reference-kl-coef",
+        type=float,
+        default=0.0,
+        help="KL penalty toward the frozen warm-start policy.",
+    )
     p.add_argument("--vp-delta-final", type=float, default=None,
                    help="anneal shaped reward toward this over 3 run phases")
     p.add_argument("--train-seats", default=None,
                    help="comma list, e.g. policy,heuristic,policy,heuristic — "
                         "mixed-opponent training (default: all policy self-play)")
+    p.add_argument(
+        "--rotate-train-seat",
+        action="store_true",
+        help="Rotate a single policy seat across all four positions each update.",
+    )
+    p.add_argument(
+        "--train-opening-heuristic",
+        action="store_true",
+        help=(
+            "Auto-play learner initial settlements with Heuristic-v2 so PPO "
+            "trains on the same continuation states as OpeningHybridPolicy."
+        ),
+    )
+    p.add_argument("--alpha-net", default="models/catan-512.ctnn")
+    p.add_argument("--train-alpha-root-k", type=int, default=8)
+    p.add_argument("--train-alpha-samples", type=int, default=96)
+    p.add_argument("--train-alpha-depth", type=int, default=300)
+    p.add_argument(
+        "--alpha-budget-cycle",
+        default=None,
+        help=(
+            "Per-update Alpha budgets as root_k:samples:depth[xrepeat], "
+            "for example 1:1:0x8,2:4:0x2,8:96:300."
+        ),
+    )
     return p.parse_args()
+
+
+def rotate_single_policy_seat(
+    train_seats: list[str] | None,
+    rotation: int,
+) -> list[str] | None:
+    """Rotate one learner seat while preserving the opponent lineup."""
+    if train_seats is None:
+        return None
+    if train_seats.count("policy") != 1:
+        raise ValueError("--rotate-train-seat requires exactly one policy seat")
+    shift = rotation % len(train_seats)
+    if shift == 0:
+        return train_seats.copy()
+    return train_seats[-shift:] + train_seats[:-shift]
 
 
 class PolicyValueNet(nn.Module):
@@ -76,6 +175,18 @@ class PolicyValueNet(nn.Module):
         logits = self.policy(h)
         logits = logits.masked_fill(~mask, float("-inf"))
         return logits, self.value(h).squeeze(-1)
+
+
+def configure_trainable_parameters(
+    net: PolicyValueNet,
+    policy_head_only: bool,
+) -> list[nn.Parameter]:
+    if policy_head_only:
+        for parameter in net.trunk.parameters():
+            parameter.requires_grad_(False)
+        for parameter in net.value.parameters():
+            parameter.requires_grad_(False)
+    return [parameter for parameter in net.parameters() if parameter.requires_grad]
 
 
 class Metrics:
@@ -113,33 +224,59 @@ def save_checkpoint(run_dir: Path, net, optimizer, step: int, config: dict):
     if latest.is_symlink() or latest.exists():
         latest.unlink()
     latest.symlink_to(path.name)
+    return path
+
+
+def make_train_env(args, train_seats, vp_delta: float, budget: AlphaBudget, seed: int):
+    return catan_py.VecEnv(
+        args.num_envs,
+        victory_target=args.victory_target,
+        visibility=args.visibility,
+        vp_delta=vp_delta,
+        potential_scale=args.potential_scale,
+        seed=seed,
+        seats=train_seats,
+        alpha_net=args.alpha_net if train_seats and "alpha" in train_seats else None,
+        alpha_root_k=budget.root_k,
+        alpha_samples=budget.samples,
+        alpha_depth=budget.depth,
+        policy_opening_heuristic=args.train_opening_heuristic,
+    )
 
 
 @torch.no_grad()
 def evaluate_vs(net, device, opponent: str, episodes: int, seed: int, args) -> dict:
-    """Greedy policy in seat 0 vs three engine bots ('random' or
-    'heuristic'). Bot seats play inside the env at engine speed, so every
-    surfaced decision belongs to the policy. Baseline ~25%."""
-    env = catan_py.VecEnv(
-        48,
-        victory_target=args.victory_target,
-        visibility=args.visibility,
-        seed=seed,
-        seats=["policy", opponent, opponent, opponent],
-    )
-    obs, masks, seats = env.observe()
+    """Greedy policy against three engine bots, paired across all seats."""
     wins = done_eps = vp_sum = caps = 0
-    while done_eps < episodes:
-        o = torch.as_tensor(obs, device=device)
-        m = torch.as_tensor(masks, device=device)
-        logits, _ = net(o, m)
-        actions = logits.argmax(dim=1).cpu().numpy().astype(np.uint32)
-        obs, masks, seats, rewards, dones, terminals = env.step(actions)
-        for turns, winner, vps, cap in env.take_episode_stats():
-            done_eps += 1
-            wins += int(winner == 0)
-            vp_sum += vps[0]
-            caps += int(cap)
+    per_seat = max(1, episodes // 4)
+    for candidate_seat in range(4):
+        seats_config = [opponent] * 4
+        seats_config[candidate_seat] = "policy"
+        env = catan_py.VecEnv(
+            min(24, per_seat),
+            victory_target=args.victory_target,
+            visibility=args.visibility,
+            seed=seed,
+            seats=seats_config,
+            alpha_net=args.alpha_net if opponent == "alpha" else None,
+            policy_opening_heuristic=args.train_opening_heuristic,
+        )
+        obs, masks, seats = env.observe()
+        seat_done = 0
+        while seat_done < per_seat:
+            o = torch.as_tensor(obs, device=device)
+            m = torch.as_tensor(masks, device=device)
+            logits, _ = net(o, m)
+            actions = logits.argmax(dim=1).cpu().numpy().astype(np.uint32)
+            obs, masks, seats, rewards, dones, terminals = env.step(actions)
+            for turns, winner, vps, cap in env.take_episode_stats():
+                if seat_done >= per_seat:
+                    break
+                seat_done += 1
+                done_eps += 1
+                wins += int(winner == candidate_seat)
+                vp_sum += vps[candidate_seat]
+                caps += int(cap)
     return {
         "win_rate": wins / done_eps,
         "games": done_eps,
@@ -165,24 +302,59 @@ def main():
                                      "seed": args.seed, "run_dir": str(run_dir)})
 
     train_seats = args.train_seats.split(",") if args.train_seats else None
-    env = catan_py.VecEnv(
-        args.num_envs,
-        victory_target=args.victory_target,
-        visibility=args.visibility,
-        vp_delta=args.vp_delta,
-        seed=args.seed,
-        seats=train_seats,
+    alpha_budgets = parse_alpha_budget_cycle(args.alpha_budget_cycle, args)
+    current_budget = alpha_budgets[0]
+    current_train_seats = (
+        rotate_single_policy_seat(train_seats, 0)
+        if args.rotate_train_seat
+        else train_seats
+    )
+    env = make_train_env(
+        args,
+        current_train_seats,
+        args.vp_delta,
+        current_budget,
+        args.seed,
     )
     net = PolicyValueNet(env.obs_dim, env.num_actions, args.hidden).to(device)
-    optimizer = torch.optim.Adam(net.parameters(), lr=args.lr, eps=1e-5)
+    trainable_parameters = configure_trainable_parameters(net, args.policy_head_only)
+    optimizer = torch.optim.Adam(trainable_parameters, lr=args.lr, eps=1e-5)
     if args.resume:
         ck = torch.load(args.resume, map_location=device, weights_only=False)
         assert ck["codec_version"] == catan_py.CODEC_VERSION, "codec version mismatch"
         assert ck["obs_version"] == catan_py.OBS_VERSION, "obs version mismatch"
-        net.load_state_dict(ck["model_state"])
-        optimizer.load_state_dict(ck["optimizer_state"])
-        print(f"resumed from {args.resume} at step {ck['global_step']:,}")
-    print(f"net params: {sum(p.numel() for p in net.parameters()):,} | device {device}")
+        if ck.get("catanzero_version") == 1:
+            net.trunk.load_state_dict(
+                {
+                    key.removeprefix("trunk."): value
+                    for key, value in ck["model_state"].items()
+                    if key.startswith("trunk.")
+                }
+            )
+            net.policy.load_state_dict(
+                {
+                    key.removeprefix("policy."): value
+                    for key, value in ck["model_state"].items()
+                    if key.startswith("policy.")
+                }
+            )
+            with torch.no_grad():
+                net.value.weight.copy_(ck["model_state"]["outcome.weight"][0:1])
+                net.value.bias.copy_(ck["model_state"]["outcome.bias"][0:1])
+            print(f"warm-started PPO from CatanZero checkpoint {args.resume}")
+        else:
+            net.load_state_dict(ck["model_state"])
+            if not args.policy_head_only and not args.reset_optimizer:
+                optimizer.load_state_dict(ck["optimizer_state"])
+            print(f"resumed from {args.resume} at step {ck['global_step']:,}")
+    reference_net = copy.deepcopy(net).eval()
+    for parameter in reference_net.parameters():
+        parameter.requires_grad_(False)
+    print(
+        f"net params: {sum(p.numel() for p in net.parameters()):,} "
+        f"({sum(p.numel() for p in trainable_parameters):,} trainable) | "
+        f"device {device}"
+    )
     print(f"run dir: {run_dir}\nmetrics: {metrics_path}")
 
     obs, masks, seats = env.observe()
@@ -201,25 +373,44 @@ def main():
                   (args.vp_delta + args.vp_delta_final) / 2,
                   args.vp_delta_final]
     current_phase = 0
+    best_alpha = -1.0
 
     while time.time() < deadline:
         update += 1
+        next_budget = alpha_budgets[(update - 1) % len(alpha_budgets)]
+        next_train_seats = (
+            rotate_single_policy_seat(train_seats, update - 1)
+            if args.rotate_train_seat
+            else train_seats
+        )
+        phase = current_phase
         if anneal:
             phase = min(int((time.time() - start_time) / (args.minutes * 60 / 3)), 2)
-            if phase != current_phase:
-                current_phase = phase
+        if (
+            phase != current_phase
+            or next_budget != current_budget
+            or next_train_seats != current_train_seats
+        ):
+            phase_changed = phase != current_phase
+            current_phase = phase
+            current_budget = next_budget
+            current_train_seats = next_train_seats
+            if phase_changed:
                 print(f"=== anneal phase {phase}: vp_delta -> {anneal[phase]} ===")
                 metrics.emit({"t": "run", "source": "ppo",
                               "players": [s.capitalize() for s in seat_names],
                               "seed": args.seed, "note": f"anneal vp_delta={anneal[phase]}"})
-                env = catan_py.VecEnv(
-                    args.num_envs, victory_target=args.victory_target,
-                    visibility=args.visibility, vp_delta=anneal[phase],
-                    seed=args.seed + phase, seats=train_seats,
-                )
-                pending.clear()
-                chains.clear()
-                obs, masks, seats = env.observe()
+            active_vp_delta = anneal[phase] if anneal else args.vp_delta
+            env = make_train_env(
+                args,
+                current_train_seats,
+                active_vp_delta,
+                current_budget,
+                args.seed + update,
+            )
+            pending.clear()
+            chains.clear()
+            obs, masks, seats = env.observe()
         t0 = time.time()
         # ----------------------------------------------------- rollout
         with torch.no_grad():
@@ -310,7 +501,7 @@ def main():
         b_adv = (b_adv - b_adv.mean()) / (b_adv.std() + 1e-8)
 
         # --------------------------------------------------- PPO update
-        clip_fracs, entropies = [], []
+        clip_fracs, entropies, reference_kls = [], [], []
         idx = np.arange(n)
         for _ in range(args.epochs):
             np.random.shuffle(idx)
@@ -325,13 +516,31 @@ def main():
                 policy_loss = torch.max(pg1, pg2).mean()
                 value_loss = 0.5 * (values - b_ret[mb]).pow(2).mean()
                 entropy = dist.entropy().mean()
-                loss = policy_loss + VALUE_COEF * value_loss - args.entropy_coef * entropy
+                with torch.no_grad():
+                    reference_logits, _ = reference_net(b_obs[mb], b_mask[mb])
+                    reference_log_probs = torch.log_softmax(reference_logits, dim=1)
+                    reference_probs = reference_log_probs.exp()
+                new_log_probs = torch.log_softmax(logits, dim=1)
+                log_ratio = torch.nan_to_num(
+                    reference_log_probs - new_log_probs,
+                    nan=0.0,
+                    posinf=0.0,
+                    neginf=0.0,
+                )
+                reference_kl = (reference_probs * log_ratio).sum(dim=1).mean()
+                loss = (
+                    policy_loss
+                    + VALUE_COEF * value_loss
+                    - args.entropy_coef * entropy
+                    + args.reference_kl_coef * reference_kl
+                )
                 optimizer.zero_grad()
                 loss.backward()
                 nn.utils.clip_grad_norm_(net.parameters(), MAX_GRAD_NORM)
                 optimizer.step()
                 clip_fracs.append(((ratio - 1).abs() > CLIP).float().mean().item())
                 entropies.append(entropy.item())
+                reference_kls.append(reference_kl.item())
 
         var_ret = float(b_ret.var())
         explained = 1.0 - float((b_ret - b_val).var()) / (var_ret + 1e-8)
@@ -341,24 +550,44 @@ def main():
             "explained_variance": explained, "clip_frac": float(np.mean(clip_fracs)),
             "policy_loss": float(policy_loss.item()),
             "value_loss": float(value_loss.item()), "lr": args.lr, "sps": sps,
+            "reference_kl": float(np.mean(reference_kls)),
+            "alpha_root_k": current_budget.root_k,
+            "alpha_samples": current_budget.samples,
+            "alpha_depth": current_budget.depth,
         })
         print(f"update {update} | step {global_step:,} | {sps:,.0f} sps | "
               f"ent {np.mean(entropies):.2f} | ev {explained:.2f} | "
-              f"clip {np.mean(clip_fracs):.2f} | batch {n:,}")
+              f"clip {np.mean(clip_fracs):.2f} | batch {n:,} | "
+              f"kl {np.mean(reference_kls):.3f} | "
+              f"alpha {current_budget.root_k}x{current_budget.samples}d{current_budget.depth} | "
+              f"seats {','.join(current_train_seats or ['self-play'])}")
 
         if update % args.eval_every == 0:
-            for opponent, label in (("random", "random-3"), ("heuristic", "heuristic-v1-3")):
-                result = evaluate_vs(net, device, opponent, episodes=96,
+            for opponent in args.eval_opponents.split(","):
+                opponent = opponent.strip()
+                result = evaluate_vs(net, device, opponent, episodes=args.eval_episodes,
                                      seed=10_000 + update, args=args)
-                metrics.emit({"t": "eval", "step": global_step, "vs": label, **result})
+                metrics.emit({"t": "eval", "step": global_step, "vs": opponent, **result})
                 print(f"  eval vs 3 {opponent}: {result['win_rate']*100:.1f}% "
                       f"({result['games']} games, baseline 25%)")
+                if opponent == "alpha" and result["win_rate"] > best_alpha:
+                    best_alpha = result["win_rate"]
+                    path = save_checkpoint(run_dir, net, optimizer, global_step, config)
+                    shutil.copy2(path, run_dir / "best_alpha.pt")
             save_checkpoint(run_dir, net, optimizer, global_step, config)
 
     save_checkpoint(run_dir, net, optimizer, global_step, config)
-    for opponent, label in (("random", "random-3"), ("heuristic", "heuristic-v1-3")):
-        result = evaluate_vs(net, device, opponent, episodes=192, seed=999, args=args)
-        metrics.emit({"t": "eval", "step": global_step, "vs": label, **result})
+    for opponent in args.eval_opponents.split(","):
+        opponent = opponent.strip()
+        result = evaluate_vs(
+            net,
+            device,
+            opponent,
+            episodes=args.final_eval_episodes,
+            seed=999,
+            args=args,
+        )
+        metrics.emit({"t": "eval", "step": global_step, "vs": opponent, **result})
         print(f"final eval vs 3 {opponent}: {result['win_rate']*100:.1f}% | "
               f"avg VP {result['avg_vp']:.1f} | done at step {global_step:,}")
 

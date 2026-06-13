@@ -136,6 +136,10 @@ fn parse_args() -> Config {
                 evolve::evolve(games as u64, seed);
                 std::process::exit(0);
             }
+            "--evolve-value" => {
+                evolve::evolve_value(games as u64, seed);
+                std::process::exit(0);
+            }
             "--record-golden" => {
                 i += 1;
                 let dir = std::path::PathBuf::from(&args[i]);
@@ -266,10 +270,14 @@ fn make_players(
                 Strategy::Random => Box::new(RandomPlayer::new(player_seed)),
                 Strategy::Heuristic => Box::new(HeuristicPlayer::new(player_seed)),
                 Strategy::HeuristicV2 => Box::new(HeuristicPlayer::v2(player_seed)),
-                Strategy::Rollout => Box::new(RolloutBot::new(player_seed, rollout_cfg.0, rollout_cfg.1)),
+                Strategy::Rollout => {
+                    Box::new(RolloutBot::new(player_seed, rollout_cfg.0, rollout_cfg.1))
+                }
                 Strategy::Alpha => Box::new(catan_env::alpha::AlphaBot::new(
                     player_seed,
-                    net.as_ref().expect("--net <file.ctnn> required for A seats").clone(),
+                    net.as_ref()
+                        .expect("--net <file.ctnn> required for A seats")
+                        .clone(),
                     alpha_cfg.0,
                     alpha_cfg.1,
                     alpha_cfg.2,
@@ -383,7 +391,13 @@ fn profile_step_breakdown(config: &Config) {
         let game_seed = seed_rng.gen();
         let mut game = CatanGame::new(n, game_seed);
         game.record_history = false;
-        let mut players = make_players(game_seed, &config.strategies, config.rollout_cfg, &config.net, config.alpha_cfg);
+        let mut players = make_players(
+            game_seed,
+            &config.strategies,
+            config.rollout_cfg,
+            &config.net,
+            config.alpha_cfg,
+        );
         let mut valid = Vec::with_capacity(128);
         while !game.is_game_over() && game.state.turn < 1000 {
             let phase_idx = match game.game_phase {
@@ -511,13 +525,35 @@ fn main() {
         seeds
             .iter()
             .enumerate()
-            .map(|(i, &s)| run_one(s, i, &config.strategies, record_dir, metrics_ref, config.rollout_cfg, &config.net, config.alpha_cfg))
+            .map(|(i, &s)| {
+                run_one(
+                    s,
+                    i,
+                    &config.strategies,
+                    record_dir,
+                    metrics_ref,
+                    config.rollout_cfg,
+                    &config.net,
+                    config.alpha_cfg,
+                )
+            })
             .collect()
     } else {
         seeds
             .par_iter()
             .enumerate()
-            .map(|(i, &s)| run_one(s, i, &config.strategies, record_dir, metrics_ref, config.rollout_cfg, &config.net, config.alpha_cfg))
+            .map(|(i, &s)| {
+                run_one(
+                    s,
+                    i,
+                    &config.strategies,
+                    record_dir,
+                    metrics_ref,
+                    config.rollout_cfg,
+                    &config.net,
+                    config.alpha_cfg,
+                )
+            })
             .collect()
     };
     let elapsed = start.elapsed();

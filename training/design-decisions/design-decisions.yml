@@ -1,0 +1,247 @@
+- timestamp: "2026-06-12"
+  author: "Codex"
+  changed_area: "CatanZero low-budget Gumbel root search"
+  product_catalog_surfaces:
+    - "CatanZero training and evaluation tooling"
+  blast_radius: "training-only; inference policy and game rules unchanged"
+  decision: "Select at least one high-prior legal action from each available codec action type before filling remaining Gumbel root candidates by score."
+  rationale: "Low-budget search otherwise spends all simulations on several near-duplicate actions from the dominant policy head, starving rare strategic move types of search evidence."
+  alternatives_rejected:
+    - "Increase simulations globally; prior experiments reduced laptop throughput without stable AlphaBot gains."
+    - "Duplicate codec offsets in Python; Rust already owns the fixed action layout."
+  constraints:
+    - "Root candidate count remains controlled by the existing training stage."
+    - "All selected candidates must be legal under the current information set."
+  abstractions:
+    - "Export ACTION_TYPE_BOUNDARIES from the Rust codec through catan_py."
+    - "Keep semantic root selection in stratified_root_candidates."
+  invariants:
+    - "The 299-action codec meanings do not change."
+    - "Gumbel search remains deterministic for a fixed state, model, and seed."
+    - "Greedy inference remains unchanged."
+  success_criteria:
+    - "Focused tests prove deterministic legal selection and distinct action-type coverage."
+    - "A fresh paired-seat AlphaBot checkpoint evaluation improves over the unchanged 512 champion before promotion."
+  logging: "Existing checkpoint metrics and evaluation JSON remain the owning observability surfaces."
+  user_approval_checkpoint: "User authorized continued implementation and training until the 70 percent AlphaBot target is met."
+
+- timestamp: "2026-06-12"
+  author: "Codex"
+  changed_area: "CatanZero policy architecture"
+  product_catalog_surfaces:
+    - "CatanZero training, checkpoint loading, and CTNN export"
+  blast_radius: "model policy logits and checkpoint compatibility; observation and game contracts unchanged"
+  decision: "Add a zero-initialized semantic action-type head whose logits are added to the existing 299-way action head."
+  rationale: "Independent holdouts showed that better root sampling alone does not fix the flat policy head's weak learning signal for rare strategic move types."
+  alternatives_rejected:
+    - "Replace the flat head entirely; that would discard the strongest 512 checkpoint and require training from scratch."
+    - "Increase model width; prior 1024-wide training reduced laptop throughput without fixing bootstrap quality."
+  constraints:
+    - "Version 1 flat checkpoints must load with numerically unchanged logits."
+    - "The factorized head must remain exportable to the existing Rust CTNN runtime."
+  abstractions:
+    - "CatanZeroNet owns action-type composition and effective flat export parameters."
+    - "load_catanzero_state owns explicit v1/v2 compatibility."
+  invariants:
+    - "Codec and observation versions remain unchanged."
+    - "Greedy behavior of a freshly loaded v1 checkpoint remains unchanged."
+    - "Rust inference receives logits equivalent to Python inference."
+  success_criteria:
+    - "Tests prove zero-initialized equivalence and group-wide type shifts."
+    - "A CTNN round-trip passes its embedded self-check."
+    - "Fresh paired-seat evaluations determine promotion; no short checkpoint sample is sufficient."
+  logging: "Checkpoint version and existing evaluation metrics identify the architecture and measured behavior."
+  user_approval_checkpoint: "User authorized continued architecture and training changes toward the 70 percent AlphaBot target."
+
+- timestamp: "2026-06-12"
+  author: "Codex"
+  changed_area: "AlphaBot elite best-response optimization"
+  product_catalog_surfaces:
+    - "Alpha CEM training experiment"
+  blast_radius: "optional training mode only"
+  decision: "Allow elite-game optimization to update only the factorized action-type head."
+  rationale: "Whole-network Alpha-only updates repeatedly improved short Alpha samples while regressing the balanced champion gate."
+  alternatives_rejected:
+    - "Continue whole-network CEM; the prior 128-game experiment peaked at 39.6 percent."
+    - "Freeze only the trunk; per-action drift can still erase the champion's within-type ranking."
+  constraints:
+    - "The mode is opt-in through --type-head-only."
+    - "KL regularization remains active against the pre-update policy."
+  abstractions:
+    - "The existing fit_elites optimizer owns parameter selection."
+  invariants:
+    - "Trunk, value heads, and flat 299-way policy parameters remain byte-identical in type-head-only mode."
+  success_criteria:
+    - "A fresh paired-seat evaluation improves AlphaBot win rate without failing balanced champion play."
+  logging: "Existing per-iteration history records collection rate, losses, evaluation, duration, and checkpoint."
+  user_approval_checkpoint: "User authorized continued optimization experiments toward the fixed target."
+
+- timestamp: "2026-06-12"
+  author: "Codex"
+  changed_area: "CatanZero search value calibration"
+  product_catalog_surfaces:
+    - "Alpha CEM trajectory collection and information-set MCTS inference"
+  blast_radius: "optional outcome-head training and search evaluation"
+  decision: "Train only the four-player outcome head from complete zero-sum games against AlphaBot."
+  rationale: "Both PUCT and Gumbel search degrade as simulations increase, identifying leaf-value ranking as the current search bottleneck."
+  alternatives_rejected:
+    - "Increase search budget; 8 and 16 simulation PUCT fell below greedy."
+    - "Update the shared trunk; that would change the already stronger greedy policy."
+  constraints:
+    - "Collected terminal outcomes are rotated into the acting candidate's relative-seat order."
+    - "Only outcome.weight and outcome.bias may change."
+  abstractions:
+    - "fit_outcome_head owns frozen-feature value calibration."
+    - "The existing evaluate_match search_simulations path measures the effect."
+  invariants:
+    - "Greedy policy logits remain byte-identical."
+    - "Training outcomes are zero-sum and match CatanZero's value convention."
+  success_criteria:
+    - "A tensor-diff test proves only the outcome head changes."
+    - "Same-board MCTS evaluation improves over both greedy and the uncalibrated value head."
+  logging: "Per-iteration history records value loss, sample count, search budget, and evaluation."
+  user_approval_checkpoint: "User authorized continued inference and training improvements toward the fixed target."
+
+- timestamp: "2026-06-12"
+  author: "Codex"
+  changed_area: "AlphaBot hidden-information search"
+  product_catalog_surfaces:
+    - "Official-information AlphaBot training and evaluation opponent"
+  blast_radius: "all realistic-visibility AlphaBot rollouts"
+  decision: "Re-determinize opponent hidden cards independently for every realistic AlphaBot rollout."
+  rationale: "The shipped AlphaBot masked its root observation but cloned the true hidden game for rollouts, giving it access to opponents' actual cards and violating the official-information contract."
+  alternatives_rejected:
+    - "Re-determinize only once per decision; independent rollout samples should integrate over the information set."
+    - "Keep the existing benchmark; it measures a hidden-information oracle rather than a legal Catan agent."
+  constraints:
+    - "The acting player's private cards and all public state must be preserved."
+    - "Perfect-visibility AlphaBot behavior remains unchanged."
+  abstractions:
+    - "AlphaBot::rollout_value owns information-set sampling."
+    - "AlphaTeacher delegates fairness to AlphaBot instead of pre-sampling once."
+  invariants:
+    - "Every chosen root action remains legal for the observer."
+    - "Fixed seeds remain deterministic."
+    - "Evaluation opponents and training teachers obey the same hidden-information rules."
+  success_criteria:
+    - "Rust environment/search tests and Python teacher legality tests pass."
+    - "Fresh paired-seat benchmarks are rerun because old AlphaBot scores are not comparable."
+  logging: "Existing evaluation seeds, Alpha budgets, and visibility fields remain the reproducibility record."
+  user_approval_checkpoint: "User explicitly required official hidden information."
+
+- timestamp: "2026-06-13"
+  author: "Codex"
+  changed_area: "Terminal Longest Road auxiliary supervision"
+  product_catalog_surfaces:
+    - "Counterfactual policy-improvement trainer"
+    - "Vectorized Catan environment Python boundary"
+  blast_radius: "opt-in training labels and shared-trunk optimization; game rules, codec, observation version, and greedy inference unchanged"
+  decision: "Expose terminal Longest Road ownership as an absolute-seat one-hot label and support relative-seat auxiliary training, but do not promote either trained candidate."
+  rationale: "AlphaBot wins most retained-policy losses through Longest Road, so the experiment tested whether explicit future award representation would improve the late policy."
+  alternatives_rejected:
+    - "Loss-only road labels: v8 scored 82/96 against the retained policy's 83/96."
+    - "Road labels from all games with policy imitation restricted to losses: v9 tied 83/96, then scored 104/128 versus 106/128 on the extended gate."
+  constraints:
+    - "Terminal labels are one-hot over four absolute seats plus no holder."
+    - "Malformed terminal labels fail at the Python boundary."
+    - "Policy imitation remains loss-only when requested; all-game samples may contribute only auxiliary and KL losses."
+  abstractions:
+    - "VecCatanEnv owns terminal side-buffer lifetime across auto-reset."
+    - "relative_road_target owns absolute-to-relative seat rotation."
+    - "fit_counterfactuals owns separate policy and auxiliary sample weights."
+  invariants:
+    - "Live vector-environment rows expose all-zero terminal labels."
+    - "Completed rows retain the finished game's label after observation auto-reset."
+    - "Promotion requires independent per-episode rollout seeds and a multi-seed gain over the incumbent."
+  success_criteria:
+    - "Rust and Python boundary tests pass."
+    - "A candidate must beat 83/96 on the initial Alpha screen and then beat 159/192 on the full retained gate."
+  logging: "Run result JSON records policy sample count, total auxiliary sample count, road loss, KL loss, and evaluation artifacts."
+  user_approval_checkpoint: "User authorized autonomous implementation and training toward 90 percent against every opponent."
+
+- timestamp: "2026-06-12"
+  author: "Codex"
+  changed_area: "PPO AlphaBot best-response training"
+  product_catalog_surfaces:
+    - "High-throughput PPO trainer"
+  blast_radius: "optional mixed-opponent training schedule"
+  decision: "Add an opt-in update-level rotation for a single learner seat."
+  rationale: "The existing direct AlphaBot PPO path always trained the learner in seat zero, while promotion evaluation pairs every board across all four seats."
+  alternatives_rejected:
+    - "Trust seat-relative observations alone; board order and setup position still create seat-specific trajectories."
+    - "Run four independent trainers; that divides data and adds checkpoint-merging complexity."
+  constraints:
+    - "Rotation requires exactly one policy seat."
+    - "The opponent lineup is preserved while the entire seat list rotates."
+  abstractions:
+    - "rotate_single_policy_seat owns lineup rotation."
+    - "The existing environment recreation boundary applies each update's lineup."
+  invariants:
+    - "Default PPO behavior is unchanged unless --rotate-train-seat is set."
+    - "All four learner positions appear once every four updates."
+  success_criteria:
+    - "Unit tests prove full seat coverage and reject ambiguous lineups."
+    - "Fresh paired-seat AlphaBot evaluation determines whether the PPO checkpoint improves."
+  logging: "Each PPO update prints and records its Alpha budget; console output also identifies the active seat lineup."
+  user_approval_checkpoint: "User authorized self-play and opponent-dynamic changes toward the fixed target."
+
+- timestamp: "2026-06-12"
+  author: "Codex"
+  changed_area: "Hybrid opening and PPO training-distribution alignment"
+  product_catalog_surfaces:
+    - "OpeningHybridPolicy inference"
+    - "CatanEnv and VecEnv mixed-opponent training"
+    - "PPO checkpoint selection"
+  blast_radius: "opt-in learner opening behavior only"
+  decision: "Auto-play only policy-controlled initial settlements with Heuristic-v2 during aligned PPO training and evaluation."
+  rationale: "The strongest deployed policy uses heuristic settlement placement, while earlier PPO learned and selected checkpoints from weaker neural opening states. Training, evaluation, and inference must share the same opening-state distribution for continuation improvements to compose."
+  alternatives_rejected:
+    - "Delegate setup roads too; Heuristic-v2 chooses initial roads randomly and reduced a fresh screen from 75.0 to 59.4 percent."
+    - "Blend neural and heuristic settlement ranks; neural weights from 0.15 to 0.45 reduced same-board win rate."
+    - "Keep plain-network PPO evaluation; it selects a different agent than the deployed hybrid."
+  constraints:
+    - "Only PlaceInitialSettlement actions are auto-played."
+    - "Setup roads and all later policy decisions continue to surface to PPO."
+    - "The behavior is disabled by default and enabled explicitly with --train-opening-heuristic."
+  abstractions:
+    - "EnvConfig.policy_opening_heuristic owns the engine-level handoff."
+    - "PPO uses the same flag in training and checkpoint evaluation."
+  invariants:
+    - "Opponent seats and hidden-information visibility are unchanged."
+    - "Rewards from auto-played settlements remain in the learner's pending return."
+    - "Default environment and PPO behavior remain unchanged."
+  success_criteria:
+    - "Tests prove settlement decisions are skipped while initial-road decisions remain visible."
+    - "Fresh paired-seat evaluation against three fair AlphaBots exceeds 70 percent."
+  logging: "Run config records train_opening_heuristic, and existing metrics record checkpoint AlphaBot performance."
+  user_approval_checkpoint: "User instructed continued autonomous optimization until the 70 percent AlphaBot target is achieved."
+
+- timestamp: "2026-06-12"
+  author: "Codex"
+  changed_area: "AlphaBot best-response promotion"
+  product_catalog_surfaces:
+    - "OpeningHybridPolicy inference"
+    - "Promoted 512-wide CatanZero agent"
+  blast_radius: "explicit promoted inference configuration"
+  decision: "Promote the original 512 CatanZero champion with second-settlement resource complement scoring and tactical heuristic refinement."
+  rationale: "On a fresh 96-game paired-seat holdout, this policy beat three fair full-budget AlphaBots 70-26. The previous settlement-only inference using the same network and boards scored 56-40, and the trained policy-head checkpoint scored 69-27."
+  alternatives_rejected:
+    - "Promote the policy-head checkpoint; it lost the direct same-board comparison by one game."
+    - "Promote full-network PPO checkpoints; multiple 48-game peaks above 70 percent regressed to 60-63 percent on fresh 96-game holdouts."
+    - "Use heuristic setup roads; the heuristic selects roads randomly and reduced performance."
+  constraints:
+    - "Inference remains greedy at the network action-type level."
+    - "All heuristic refinements use public information or the acting player's private information."
+    - "AlphaBot evaluation remains realistic-visibility and independently re-determinized per rollout."
+  abstractions:
+    - "OpeningHybridPolicy owns settlement strategy scoring and within-type refinement."
+    - "The promotion manifest owns the exact runtime configuration and holdout evidence."
+  invariants:
+    - "The promoted network remains 512-wide and CTNN-compatible."
+    - "Road choice remains neural."
+    - "Default planner behavior is unchanged unless promotion flags are supplied."
+  success_criteria:
+    - "At least 70 percent wins over three full shipped AlphaBots on a fresh 96-game paired-seat holdout."
+    - "Frozen heuristic-v1 and heuristic-v2 comparisons are recorded."
+  logging: "training/runs/20260612-alpha-best-response-promoted.json records the policy, opponent budget, seed, and result paths."
+  user_approval_checkpoint: "User explicitly required continued work until a verified 70+ percent AlphaBot win rate."

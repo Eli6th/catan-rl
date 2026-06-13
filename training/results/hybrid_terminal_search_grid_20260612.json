@@ -1,0 +1,277 @@
+{
+  "net": "training/runs/20260612-2244-h2-policy-head-continuation-5m/screening/base.ctnn",
+  "games_per_opponent": 96,
+  "seeds": [
+    39100000,
+    39200000,
+    39300000
+  ],
+  "results": [
+    {
+      "config": {
+        "name": "greedy",
+        "root_k": 1,
+        "samples": 1,
+        "continuation": 0,
+        "min_vp": 0,
+        "value_weight": 1.0,
+        "potential_weight": 0.0,
+        "to_terminal": false,
+        "max_decisions": 64
+      },
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.75
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.8020833333333333
+    },
+    {
+      "config": {
+        "name": "vp6_terminal_4x16",
+        "root_k": 4,
+        "samples": 16,
+        "continuation": 0,
+        "min_vp": 6,
+        "value_weight": 1.0,
+        "potential_weight": 0.0,
+        "to_terminal": true,
+        "max_decisions": 48
+      },
+      "rates": {
+        "heuristic": 0.84375,
+        "heuristic_v2": 0.7395833333333334
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.7916666666666667
+    },
+    {
+      "config": {
+        "name": "vp6_terminal_2x4",
+        "root_k": 2,
+        "samples": 4,
+        "continuation": 0,
+        "min_vp": 6,
+        "value_weight": 1.0,
+        "potential_weight": 0.0,
+        "to_terminal": true,
+        "max_decisions": 48
+      },
+      "rates": {
+        "heuristic": 0.8020833333333334,
+        "heuristic_v2": 0.7291666666666666
+      },
+      "worst_rate": 0.7291666666666666,
+      "mean_rate": 0.765625
+    },
+    {
+      "config": {
+        "name": "vp6_terminal_4x4",
+        "root_k": 4,
+        "samples": 4,
+        "continuation": 0,
+        "min_vp": 6,
+        "value_weight": 1.0,
+        "potential_weight": 0.0,
+        "to_terminal": true,
+        "max_decisions": 48
+      },
+      "rates": {
+        "heuristic": 0.78125,
+        "heuristic_v2": 0.7291666666666666
+      },
+      "worst_rate": 0.7291666666666666,
+      "mean_rate": 0.7552083333333333
+    },
+    {
+      "config": {
+        "name": "vp5_terminal_2x4",
+        "root_k": 2,
+        "samples": 4,
+        "continuation": 0,
+        "min_vp": 5,
+        "value_weight": 1.0,
+        "potential_weight": 0.0,
+        "to_terminal": true,
+        "max_decisions": 48
+      },
+      "rates": {
+        "heuristic": 0.8125,
+        "heuristic_v2": 0.71875
+      },
+      "worst_rate": 0.71875,
+      "mean_rate": 0.765625
+    },
+    {
+      "config": {
+        "name": "vp5_terminal_4x16",
+        "root_k": 4,
+        "samples": 16,
+        "continuation": 0,
+        "min_vp": 5,
+        "value_weight": 1.0,
+        "potential_weight": 0.0,
+        "to_terminal": true,
+        "max_decisions": 48
+      },
+      "rates": {
+        "heuristic": 0.8125,
+        "heuristic_v2": 0.71875
+      },
+      "worst_rate": 0.71875,
+      "mean_rate": 0.765625
+    },
+    {
+      "config": {
+        "name": "vp6_terminal_8x8",
+        "root_k": 8,
+        "samples": 8,
+        "continuation": 0,
+        "min_vp": 6,
+        "value_weight": 1.0,
+        "potential_weight": 0.0,
+        "to_terminal": true,
+        "max_decisions": 48
+      },
+      "rates": {
+        "heuristic": 0.8020833333333334,
+        "heuristic_v2": 0.7083333333333334
+      },
+      "worst_rate": 0.7083333333333334,
+      "mean_rate": 0.7552083333333334
+    },
+    {
+      "config": {
+        "name": "vp5_terminal_4x4",
+        "root_k": 4,
+        "samples": 4,
+        "continuation": 0,
+        "min_vp": 5,
+        "value_weight": 1.0,
+        "potential_weight": 0.0,
+        "to_terminal": true,
+        "max_decisions": 48
+      },
+      "rates": {
+        "heuristic": 0.75,
+        "heuristic_v2": 0.7083333333333334
+      },
+      "worst_rate": 0.7083333333333334,
+      "mean_rate": 0.7291666666666667
+    },
+    {
+      "config": {
+        "name": "vp4_terminal_2x4",
+        "root_k": 2,
+        "samples": 4,
+        "continuation": 0,
+        "min_vp": 4,
+        "value_weight": 1.0,
+        "potential_weight": 0.0,
+        "to_terminal": true,
+        "max_decisions": 48
+      },
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.6979166666666666
+      },
+      "worst_rate": 0.6979166666666666,
+      "mean_rate": 0.7864583333333333
+    },
+    {
+      "config": {
+        "name": "vp5_terminal_4x8",
+        "root_k": 4,
+        "samples": 8,
+        "continuation": 0,
+        "min_vp": 5,
+        "value_weight": 1.0,
+        "potential_weight": 0.0,
+        "to_terminal": true,
+        "max_decisions": 48
+      },
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.6979166666666666
+      },
+      "worst_rate": 0.6979166666666666,
+      "mean_rate": 0.7604166666666666
+    },
+    {
+      "config": {
+        "name": "vp5_terminal_8x8",
+        "root_k": 8,
+        "samples": 8,
+        "continuation": 0,
+        "min_vp": 5,
+        "value_weight": 1.0,
+        "potential_weight": 0.0,
+        "to_terminal": true,
+        "max_decisions": 48
+      },
+      "rates": {
+        "heuristic": 0.7916666666666666,
+        "heuristic_v2": 0.6979166666666666
+      },
+      "worst_rate": 0.6979166666666666,
+      "mean_rate": 0.7447916666666666
+    },
+    {
+      "config": {
+        "name": "vp6_terminal_4x8",
+        "root_k": 4,
+        "samples": 8,
+        "continuation": 0,
+        "min_vp": 6,
+        "value_weight": 1.0,
+        "potential_weight": 0.0,
+        "to_terminal": true,
+        "max_decisions": 48
+      },
+      "rates": {
+        "heuristic": 0.8333333333333334,
+        "heuristic_v2": 0.6875
+      },
+      "worst_rate": 0.6875,
+      "mean_rate": 0.7604166666666667
+    },
+    {
+      "config": {
+        "name": "vp4_terminal_4x8",
+        "root_k": 4,
+        "samples": 8,
+        "continuation": 0,
+        "min_vp": 4,
+        "value_weight": 1.0,
+        "potential_weight": 0.0,
+        "to_terminal": true,
+        "max_decisions": 48
+      },
+      "rates": {
+        "heuristic": 0.71875,
+        "heuristic_v2": 0.625
+      },
+      "worst_rate": 0.625,
+      "mean_rate": 0.671875
+    },
+    {
+      "config": {
+        "name": "vp4_terminal_4x4",
+        "root_k": 4,
+        "samples": 4,
+        "continuation": 0,
+        "min_vp": 4,
+        "value_weight": 1.0,
+        "potential_weight": 0.0,
+        "to_terminal": true,
+        "max_decisions": 48
+      },
+      "rates": {
+        "heuristic": 0.78125,
+        "heuristic_v2": 0.6145833333333334
+      },
+      "worst_rate": 0.6145833333333334,
+      "mean_rate": 0.6979166666666667
+    }
+  ]
+}

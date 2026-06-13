@@ -1,0 +1,87 @@
+{
+  "games": 96,
+  "seeds": [
+    42000000,
+    42100000,
+    42200000
+  ],
+  "results": [
+    {
+      "name": "off",
+      "min_vp": 8,
+      "max_deficit": 0,
+      "wins": 86,
+      "rate": 0.8958333333333334
+    },
+    {
+      "name": "vp5_d2",
+      "min_vp": 5,
+      "max_deficit": 2,
+      "wins": 83,
+      "rate": 0.8645833333333334
+    },
+    {
+      "name": "vp6_d1",
+      "min_vp": 6,
+      "max_deficit": 1,
+      "wins": 83,
+      "rate": 0.8645833333333334
+    },
+    {
+      "name": "vp6_d2",
+      "min_vp": 6,
+      "max_deficit": 2,
+      "wins": 82,
+      "rate": 0.8541666666666666
+    },
+    {
+      "name": "vp5_d3",
+      "min_vp": 5,
+      "max_deficit": 3,
+      "wins": 80,
+      "rate": 0.8333333333333334
+    },
+    {
+      "name": "vp5_d4",
+      "min_vp": 5,
+      "max_deficit": 4,
+      "wins": 80,
+      "rate": 0.8333333333333334
+    },
+    {
+      "name": "vp5_d5",
+      "min_vp": 5,
+      "max_deficit": 5,
+      "wins": 80,
+      "rate": 0.8333333333333334
+    },
+    {
+      "name": "vp5_d1",
+      "min_vp": 5,
+      "max_deficit": 1,
+      "wins": 79,
+      "rate": 0.8229166666666666
+    },
+    {
+      "name": "vp6_d3",
+      "min_vp": 6,
+      "max_deficit": 3,
+      "wins": 79,
+      "rate": 0.8229166666666666
+    },
+    {
+      "name": "vp6_d4",
+      "min_vp": 6,
+      "max_deficit": 4,
+      "wins": 79,
+      "rate": 0.8229166666666666
+    },
+    {
+      "name": "vp6_d5",
+      "min_vp": 6,
+      "max_deficit": 5,
+      "wins": 79,
+      "rate": 0.8229166666666666
+    }
+  ]
+}

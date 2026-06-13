@@ -10,9 +10,9 @@ use crate::obs::OBS_DIM;
 
 pub struct MlpNet {
     pub hidden: usize,
-    w1: Vec<f32>, // [hidden][OBS_DIM]
+    w1t: Vec<f32>, // [OBS_DIM][hidden] - input-major (transposed at load)
     b1: Vec<f32>,
-    w2: Vec<f32>, // [hidden][hidden]
+    w2t: Vec<f32>, // [hidden][hidden] - input-major (transposed at load)
     b2: Vec<f32>,
     wp: Vec<f32>, // [NUM_ACTIONS][hidden]
     bp: Vec<f32>,
@@ -21,6 +21,7 @@ pub struct MlpNet {
 }
 
 /// Reusable forward-pass scratch (one per bot; keeps play allocation-free).
+#[derive(Clone)]
 pub struct NetScratch {
     h1: Vec<f32>,
     h2: Vec<f32>,
@@ -36,7 +37,57 @@ impl NetScratch {
 }
 
 fn dot(a: &[f32], b: &[f32]) -> f32 {
-    a.iter().zip(b).map(|(x, y)| x * y).sum()
+    // A strict left-to-right f32 sum cannot be vectorized because float
+    // addition is not associative. Independent lanes let LLVM vectorize.
+    let mut acc = [0.0f32; 16];
+    let mut ca = a.chunks_exact(16);
+    let mut cb = b.chunks_exact(16);
+    for (xs, ys) in ca.by_ref().zip(cb.by_ref()) {
+        for lane in 0..16 {
+            acc[lane] += xs[lane] * ys[lane];
+        }
+    }
+    let tail: f32 = ca
+        .remainder()
+        .iter()
+        .zip(cb.remainder())
+        .map(|(x, y)| x * y)
+        .sum();
+    acc.iter().sum::<f32>() + tail
+}
+
+fn axpy(out: &mut [f32], input: f32, column: &[f32]) {
+    for (value, &weight) in out.iter_mut().zip(column) {
+        *value += input * weight;
+    }
+}
+
+fn matvec_t_relu(weights: &[f32], input: &[f32], bias: &[f32], out: &mut [f32]) {
+    let outputs = out.len();
+    debug_assert_eq!(weights.len(), input.len() * outputs);
+    out.copy_from_slice(bias);
+    for (column, &input_value) in input.iter().enumerate() {
+        if input_value != 0.0 {
+            axpy(
+                out,
+                input_value,
+                &weights[column * outputs..(column + 1) * outputs],
+            );
+        }
+    }
+    for value in out {
+        *value = value.max(0.0);
+    }
+}
+
+fn transpose(weights: &[f32], rows: usize, columns: usize) -> Vec<f32> {
+    let mut out = vec![0.0f32; weights.len()];
+    for row in 0..rows {
+        for column in 0..columns {
+            out[column * rows + row] = weights[row * columns + column];
+        }
+    }
+    out
 }
 
 fn read_f32s(bytes: &[u8], off: &mut usize, n: usize) -> Vec<f32> {
@@ -63,9 +114,17 @@ impl MlpNet {
         let mut off = 20;
         let net = MlpNet {
             hidden,
-            w1: read_f32s(&bytes, &mut off, hidden * OBS_DIM),
+            w1t: transpose(
+                &read_f32s(&bytes, &mut off, hidden * OBS_DIM),
+                hidden,
+                OBS_DIM,
+            ),
             b1: read_f32s(&bytes, &mut off, hidden),
-            w2: read_f32s(&bytes, &mut off, hidden * hidden),
+            w2t: transpose(
+                &read_f32s(&bytes, &mut off, hidden * hidden),
+                hidden,
+                hidden,
+            ),
             b2: read_f32s(&bytes, &mut off, hidden),
             wp: read_f32s(&bytes, &mut off, NUM_ACTIONS * hidden),
             bp: read_f32s(&bytes, &mut off, NUM_ACTIONS),
@@ -87,7 +146,10 @@ impl MlpNet {
         );
         for (i, &e) in expect_logits.iter().enumerate() {
             let logit = dot(&net.wp[i * hidden..(i + 1) * hidden], &scratch.h2) + net.bp[i];
-            assert!((logit - e).abs() < 1e-3, "CTNN self-check failed: logit {i}");
+            assert!(
+                (logit - e).abs() < 1e-3,
+                "CTNN self-check failed: logit {i}"
+            );
         }
         net
     }
@@ -95,15 +157,8 @@ impl MlpNet {
     /// Run the shared trunk; results live in `scratch` for the heads below.
     pub fn trunk(&self, obs: &[f32], scratch: &mut NetScratch) {
         debug_assert_eq!(obs.len(), OBS_DIM);
-        for o in 0..self.hidden {
-            let z = dot(&self.w1[o * OBS_DIM..(o + 1) * OBS_DIM], obs) + self.b1[o];
-            scratch.h1[o] = z.max(0.0);
-        }
-        for o in 0..self.hidden {
-            let z = dot(&self.w2[o * self.hidden..(o + 1) * self.hidden], &scratch.h1)
-                + self.b2[o];
-            scratch.h2[o] = z.max(0.0);
-        }
+        matvec_t_relu(&self.w1t, obs, &self.b1, &mut scratch.h1);
+        matvec_t_relu(&self.w2t, &scratch.h1, &self.b2, &mut scratch.h2);
     }
 
     /// Value head (expected terminal reward for the acting seat, ~[-1, 1]).
@@ -113,7 +168,32 @@ impl MlpNet {
 
     /// Policy logit for one action id.
     pub fn logit_from(&self, scratch: &NetScratch, action_id: usize) -> f32 {
-        dot(&self.wp[action_id * self.hidden..(action_id + 1) * self.hidden], &scratch.h2)
-            + self.bp[action_id]
+        dot(
+            &self.wp[action_id * self.hidden..(action_id + 1) * self.hidden],
+            &scratch.h2,
+        ) + self.bp[action_id]
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::dot;
+
+    #[test]
+    fn optimized_dot_matches_scalar() {
+        for len in [1, 15, 16, 17, 192, 299, 512, 1350] {
+            let a: Vec<f32> = (0..len)
+                .map(|i| ((i * 17 % 31) as f32 - 15.0) / 13.0)
+                .collect();
+            let b: Vec<f32> = (0..len)
+                .map(|i| ((i * 11 % 29) as f32 - 14.0) / 9.0)
+                .collect();
+            let expected: f32 = a.iter().zip(&b).map(|(x, y)| x * y).sum();
+            let actual = dot(&a, &b);
+            assert!(
+                (actual - expected).abs() <= 1e-3 * expected.abs().max(1.0),
+                "len {len}: optimized {actual} != scalar {expected}"
+            );
+        }
     }
 }

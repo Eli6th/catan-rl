@@ -1,0 +1,352 @@
+{
+  "games_per_opponent": 96,
+  "seeds": [
+    38600000,
+    38700000,
+    38800000
+  ],
+  "results": [
+    {
+      "net": "training/runs/20260611-512-bootstrap-v2/best.ctnn",
+      "rates": {
+        "heuristic": 0.8854166666666666,
+        "heuristic_v2": 0.8645833333333334
+      },
+      "worst_rate": 0.8645833333333334,
+      "mean_rate": 0.875
+    },
+    {
+      "net": "training/runs/20260612-h2-focus-v2/checkpoints/game_0180.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.84375
+      },
+      "worst_rate": 0.84375,
+      "mean_rate": 0.859375
+    },
+    {
+      "net": "training/runs/20260612-heuristic-mix-anchor-v1/best.ctnn",
+      "rates": {
+        "heuristic": 0.90625,
+        "heuristic_v2": 0.8333333333333334
+      },
+      "worst_rate": 0.8333333333333334,
+      "mean_rate": 0.8697916666666667
+    },
+    {
+      "net": "training/runs/20260612-heuristic-mix-anchor-v1/best_observed.ctnn",
+      "rates": {
+        "heuristic": 0.90625,
+        "heuristic_v2": 0.8333333333333334
+      },
+      "worst_rate": 0.8333333333333334,
+      "mean_rate": 0.8697916666666667
+    },
+    {
+      "net": "training/runs/20260612-heuristic-mix-anchor-v1/checkpoints/game_0144.ctnn",
+      "rates": {
+        "heuristic": 0.90625,
+        "heuristic_v2": 0.8333333333333334
+      },
+      "worst_rate": 0.8333333333333334,
+      "mean_rate": 0.8697916666666667
+    },
+    {
+      "net": "training/runs/20260612-heuristic-mix-anchor-v1/checkpoints/game_0186.ctnn",
+      "rates": {
+        "heuristic": 0.90625,
+        "heuristic_v2": 0.8333333333333334
+      },
+      "worst_rate": 0.8333333333333334,
+      "mean_rate": 0.8697916666666667
+    },
+    {
+      "net": "training/runs/20260612-h2-focus-v2/checkpoints/game_0204.ctnn",
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.8333333333333334
+      },
+      "worst_rate": 0.8333333333333334,
+      "mean_rate": 0.84375
+    },
+    {
+      "net": "training/runs/20260612-h2-focus-v2/checkpoints/game_0228.ctnn",
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.8333333333333334
+      },
+      "worst_rate": 0.8333333333333334,
+      "mean_rate": 0.84375
+    },
+    {
+      "net": "training/runs/20260612-1351-fair-alpha-full-terminal-kl/final.ctnn",
+      "rates": {
+        "heuristic": 0.8854166666666666,
+        "heuristic_v2": 0.8229166666666666
+      },
+      "worst_rate": 0.8229166666666666,
+      "mean_rate": 0.8541666666666666
+    },
+    {
+      "net": "training/runs/20260612-overnight-512/exploration-reserve/best.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.8229166666666666
+      },
+      "worst_rate": 0.8229166666666666,
+      "mean_rate": 0.84375
+    },
+    {
+      "net": "training/runs/20260612-competitor-mix-anchor-v1/checkpoints/game_0072.ctnn",
+      "rates": {
+        "heuristic": 0.90625,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.8125,
+      "mean_rate": 0.859375
+    },
+    {
+      "net": "training/runs/20260612-h2-focus-v2/checkpoints/game_0150.ctnn",
+      "rates": {
+        "heuristic": 0.8854166666666666,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.8125,
+      "mean_rate": 0.8489583333333333
+    },
+    {
+      "net": "training/runs/20260612-h2-focus-v2/checkpoints/game_0102.ctnn",
+      "rates": {
+        "heuristic": 0.90625,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8541666666666667
+    },
+    {
+      "net": "training/runs/20260612-competitor-mix-anchor-v1/checkpoints/game_0120.ctnn",
+      "rates": {
+        "heuristic": 0.90625,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8541666666666667
+    },
+    {
+      "net": "training/runs/20260612-heuristic-mix-anchor-v1/checkpoints/game_0090.ctnn",
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8489583333333334
+    },
+    {
+      "net": "training/runs/20260612-competitor-mix-anchor-v1/checkpoints/game_0102.ctnn",
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8489583333333334
+    },
+    {
+      "net": "training/runs/20260612-h2-cem-type-screen/best.ctnn",
+      "rates": {
+        "heuristic": 0.8854166666666666,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.84375
+    },
+    {
+      "net": "training/runs/20260611-catanzero-v2/best.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8385416666666667
+    },
+    {
+      "net": "training/runs/20260612-1529-fair-alpha-hybrid-policy-head-60m/step_0000055296.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8385416666666667
+    },
+    {
+      "net": "training/runs/20260612-hybrid-aligned-v1/iteration_00.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8385416666666667
+    },
+    {
+      "net": "training/runs/20260612-h2-cem-type-aggressive/best.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8333333333333334
+    },
+    {
+      "net": "training/runs/20260612-hybrid-value-calibration/iteration_01.ctnn",
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7916666666666666,
+      "mean_rate": 0.84375
+    },
+    {
+      "net": "training/runs/20260612-1529-fair-alpha-hybrid-policy-head-60m/step_0000036864.ctnn",
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7916666666666666,
+      "mean_rate": 0.84375
+    },
+    {
+      "net": "training/runs/20260612-hybrid-signed-v2-focus/iteration_00.ctnn",
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7916666666666666,
+      "mean_rate": 0.84375
+    },
+    {
+      "net": "training/runs/20260612-1327-fair-alpha-rotating-kl/avg3.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7916666666666666,
+      "mean_rate": 0.8333333333333333
+    },
+    {
+      "net": "training/runs/20260612-hybrid-signed-v2-focus/iteration_04.ctnn",
+      "rates": {
+        "heuristic": 0.90625,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.84375
+    },
+    {
+      "net": "training/runs/20260612-1502-fair-alpha-hybrid-terminal-45m/best_alpha.ctnn",
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.8385416666666667
+    },
+    {
+      "net": "training/runs/20260612-hybrid-aligned-v1/iteration_01.ctnn",
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.8385416666666667
+    },
+    {
+      "net": "training/runs/20260612-1502-fair-alpha-hybrid-terminal-45m/step_0000076800.ctnn",
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.8333333333333334
+    },
+    {
+      "net": "training/runs/20260612-hybrid-signed-v2-focus/iteration_01.ctnn",
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.8333333333333334
+    },
+    {
+      "net": "training/runs/20260612-hybrid-signed-v2-focus/iteration_02.ctnn",
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.8333333333333334
+    },
+    {
+      "net": "training/runs/20260612-hybrid-signed-v2-focus/iteration_03.ctnn",
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.8333333333333334
+    },
+    {
+      "net": "training/runs/20260612-h2-cem-full/best.ctnn",
+      "rates": {
+        "heuristic": 0.8854166666666666,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.828125
+    },
+    {
+      "net": "training/runs/20260612-hybrid-aligned-v1/iteration_02.ctnn",
+      "rates": {
+        "heuristic": 0.8854166666666666,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.828125
+    },
+    {
+      "net": "training/runs/20260612-0955-alpha-ppo-v2-seat0/best_alpha.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.8177083333333334
+    },
+    {
+      "net": "training/runs/20260612-1327-fair-alpha-rotating-kl/best_alpha.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.8177083333333333
+    },
+    {
+      "net": "training/runs/20260612-hybrid-aligned-v1/iteration_04.ctnn",
+      "rates": {
+        "heuristic": 0.90625,
+        "heuristic_v2": 0.7395833333333334
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.8229166666666667
+    },
+    {
+      "net": "training/runs/20260612-hybrid-aligned-v1/iteration_03.ctnn",
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.7291666666666666
+      },
+      "worst_rate": 0.7291666666666666,
+      "mean_rate": 0.8125
+    }
+  ]
+}

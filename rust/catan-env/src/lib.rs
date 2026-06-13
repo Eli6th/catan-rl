@@ -9,7 +9,15 @@ pub mod codec;
 pub mod env;
 pub mod net;
 pub mod obs;
+pub mod search;
 
-pub use codec::{decode_action, encode_action, fill_action_mask, CODEC_VERSION, NUM_ACTIONS};
-pub use env::{CatanEnv, EnvConfig, RewardConfig, StepResult, VecCatanEnv};
+pub use alpha::AlphaConfig;
+pub use codec::{
+    decode_action, encode_action, fill_action_mask, ACTION_TYPE_BOUNDARIES, CODEC_VERSION,
+    NUM_ACTIONS,
+};
+pub use env::{
+    opinionated_potential, CatanEnv, EnvConfig, RewardConfig, SeatKind, StepResult, VecCatanEnv,
+};
 pub use obs::{encode_obs, Visibility, OBS_DIM, OBS_VERSION};
+pub use search::{private_targets, redeterminize};

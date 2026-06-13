@@ -42,14 +42,17 @@ flowchart LR
     subgraph Python
         PY[catan-py<br/>PyO3 bindings]
         PPO[ppo.py<br/>masked PPO self-play]
+        CZ[catanzero.py<br/>IS-MCTS self-play league]
         ELO[elo.py<br/>tournaments + best.pt gate]
     end
     CORE --> ENV --> PY --> PPO
+    PY --> CZ
     CORE --> SIM
     CORE --> WEB
     PPO -->|metrics JSONL| WEB
     PPO -->|checkpoint| ELO
     PPO -->|export_net.py| ENV
+    CZ -->|checkpoint population| CZ
 ```
 
 ## Quickstart
@@ -58,6 +61,14 @@ Rust toolchain required (`rustup`); Python 3.10+ with `torch numpy maturin`
 for the training side.
 
 ```bash
+# 0. One-time setup (Python 3.12 is compatible with the current PyO3 bindings)
+uv venv --python 3.12 .venv
+source .venv/bin/activate
+uv pip install -r requirements.txt
+(cd visualizer && npm ci)
+(cd rust && cargo build --release)
+(cd rust/catan-py && env -u CONDA_PREFIX maturin develop --release)
+
 # 1. Verify the engine (rulebook scenarios, property tests, fuzzing,
 #    longest-road oracle, zero-allocation proofs, replay goldens)
 cd rust && cargo test --release
@@ -71,10 +82,10 @@ cargo run -p catan-sim --release -- --games 100 --players A,H,H,H \
 
 # 4. Play against the engine in your browser
 cargo run -p catan-web --release   # then open http://127.0.0.1:5050
-cd ../visualizer && npm install && npm run dev   # "Play vs Engine" mode
+cd ../visualizer && npm run dev   # open http://127.0.0.1:5173
 
 # 5. Train your own agent and watch it live
-cd ../rust/catan-py && maturin develop --release && cd ../..
+cd ..
 python training/ppo.py --name myrun --minutes 10 --victory-target 7 \
     --vp-delta 0.05 --train-seats policy,heuristic,policy,heuristic \
     --metrics /tmp/metrics.jsonl
@@ -82,6 +93,10 @@ python training/ppo.py --name myrun --minutes 10 --victory-target 7 \
 
 # 6. Rate agents on the Elo ladder
 PYTHONPATH=training python training/elo.py tournament <checkpoint.pt>
+
+# 7. Train the hidden-information search model
+python training/catanzero.py train --minutes 10 --checkpoint-minutes 3
+python training/catanzero.py evaluate training/runs/<run>/best.pt --games 24
 ```
 
 `models/` ships the trained 512-hidden network (PyTorch checkpoint +
@@ -92,7 +107,7 @@ and sample compact replays (`.ctrp`, ~4.5 bytes/action).
 
 - `rust/`: the engine workspace; see [rust/README.md](rust/README.md) for
   the testing fortress, rules coverage, and performance methodology.
-- `training/`: PPO trainer, Elo harness, net export; see
+- `training/`: PPO and CatanZero trainers, Elo harness, net export; see
   [training/README.md](training/README.md) for the checkpoint contract and
   metrics schema.
 - `training/results/`: the full experiment ledger and raw run logs.

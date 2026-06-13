@@ -1,0 +1,568 @@
+{
+  "games_per_opponent": 96,
+  "seeds": [
+    40300000,
+    40400000,
+    40500000
+  ],
+  "results": [
+    {
+      "net": "training/runs/20260612-alpha-focus-smoke/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.90625,
+        "heuristic_v2": 0.8333333333333334
+      },
+      "worst_rate": 0.8333333333333334,
+      "mean_rate": 0.8697916666666667
+    },
+    {
+      "net": "training/runs/20260612-alpha-focus-smoke/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.90625,
+        "heuristic_v2": 0.8333333333333334
+      },
+      "worst_rate": 0.8333333333333334,
+      "mean_rate": 0.8697916666666667
+    },
+    {
+      "net": "training/runs/20260612-league-explore-low-lr/league-explore-low-lr/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.8333333333333334
+      },
+      "worst_rate": 0.8333333333333334,
+      "mean_rate": 0.8645833333333334
+    },
+    {
+      "net": "training/runs/20260611-512-bootstrap-v2/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.8229166666666666
+      },
+      "worst_rate": 0.8229166666666666,
+      "mean_rate": 0.859375
+    },
+    {
+      "net": "training/runs/20260611-512-bootstrap-v2/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.8229166666666666
+      },
+      "worst_rate": 0.8229166666666666,
+      "mean_rate": 0.859375
+    },
+    {
+      "net": "training/runs/20260612-h2-focus-v2/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.8229166666666666
+      },
+      "worst_rate": 0.8229166666666666,
+      "mean_rate": 0.84375
+    },
+    {
+      "net": "training/runs/20260612-policy-explore-refine/policy-explore/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.8229166666666666
+      },
+      "worst_rate": 0.8229166666666666,
+      "mean_rate": 0.8385416666666666
+    },
+    {
+      "net": "training/runs/20260612-overnight-512/exploration-reserve/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.90625,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.8125,
+      "mean_rate": 0.859375
+    },
+    {
+      "net": "training/runs/20260612-overnight-512/exploration-reserve/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.90625,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.8125,
+      "mean_rate": 0.859375
+    },
+    {
+      "net": "training/runs/20260612-overnight-512/league-only-low-lr/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8854166666666666,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.8125,
+      "mean_rate": 0.8489583333333333
+    },
+    {
+      "net": "training/runs/20260612-overnight-512/league-only-low-lr/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8854166666666666,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.8125,
+      "mean_rate": 0.8489583333333333
+    },
+    {
+      "net": "training/runs/20260612-overnight-512/league-anchor/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.84375,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.8125,
+      "mean_rate": 0.828125
+    },
+    {
+      "net": "training/runs/20260612-overnight-512/more-search/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.8125,
+      "mean_rate": 0.8177083333333333
+    },
+    {
+      "net": "training/runs/20260612-overnight-512/policy-heavy/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8854166666666666,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.84375
+    },
+    {
+      "net": "training/runs/20260612-overnight-512/policy-heavy/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8854166666666666,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.84375
+    },
+    {
+      "net": "training/runs/20260612-h2-focus-v2/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8333333333333334
+    },
+    {
+      "net": "training/runs/20260612-overnight-512/more-search/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8333333333333334
+    },
+    {
+      "net": "training/runs/20260612-overnight-smoke/league-focus/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8333333333333334
+    },
+    {
+      "net": "training/runs/20260612-overnight-smoke/league-focus/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8333333333333334
+    },
+    {
+      "net": "training/runs/20260612-league-explore-refine/league-explore/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.84375,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8229166666666667
+    },
+    {
+      "net": "training/runs/20260612-league-explore-refine/league-explore/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.84375,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8229166666666667
+    },
+    {
+      "net": "training/runs/20260612-league-explore-low-lr/league-explore-low-lr/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7916666666666666,
+      "mean_rate": 0.8333333333333333
+    },
+    {
+      "net": "training/runs/20260612-overnight-512/league-focus/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7916666666666666,
+      "mean_rate": 0.8333333333333333
+    },
+    {
+      "net": "training/runs/20260612-overnight-512/league-focus/paired_best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7916666666666666,
+      "mean_rate": 0.8333333333333333
+    },
+    {
+      "net": "training/runs/20260612-overnight-512/league-anchor/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7916666666666666,
+      "mean_rate": 0.828125
+    },
+    {
+      "net": "training/runs/20260612-overnight-512/targeted-reanalysis/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.828125
+    },
+    {
+      "net": "training/runs/20260612-overnight-512/targeted-reanalysis/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.828125
+    },
+    {
+      "net": "training/runs/20260612-h2-cem-full/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.84375,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.8072916666666667
+    },
+    {
+      "net": "training/runs/20260612-alpha-focus-r025/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.828125
+    },
+    {
+      "net": "training/runs/20260612-alpha-focus-r025/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.828125
+    },
+    {
+      "net": "training/runs/20260612-overnight-512/league-focus/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8854166666666666,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.8229166666666666
+    },
+    {
+      "net": "training/runs/20260612-fair-alpha-focus-12m/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.8177083333333333
+    },
+    {
+      "net": "training/runs/20260612-h2-cem-type-aggressive/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.8177083333333333
+    },
+    {
+      "net": "training/runs/20260612-alpha-pure-ac-elite/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.8125
+    },
+    {
+      "net": "training/runs/20260612-alpha-pure-ac-elite/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.8125
+    },
+    {
+      "net": "training/runs/20260612-competitor-mix-anchor-v1/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.8125
+    },
+    {
+      "net": "training/runs/20260612-competitor-mix-anchor-v1/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.8125
+    },
+    {
+      "net": "training/runs/20260612-policy-explore-refine/policy-explore/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.8125
+    },
+    {
+      "net": "training/runs/20260612-fair-alpha-focus-12m/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.8072916666666666
+    },
+    {
+      "net": "training/runs/20260612-h2-focus-v1/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.84375,
+        "heuristic_v2": 0.7604166666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.8020833333333333
+    },
+    {
+      "net": "training/runs/20260612-factorized-alpha-pure-smoke/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.75
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.8020833333333333
+    },
+    {
+      "net": "training/runs/20260612-heuristic-mix-anchor-v1/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.75
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.8020833333333333
+    },
+    {
+      "net": "training/runs/20260612-heuristic-mix-anchor-v1/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.75
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.8020833333333333
+    },
+    {
+      "net": "training/runs/20260612-fair-alpha-type-cem-128/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.7395833333333334
+      },
+      "worst_rate": 0.7395833333333334,
+      "mean_rate": 0.8020833333333334
+    },
+    {
+      "net": "training/runs/20260612-factorized-alpha-pure-smoke/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7291666666666666
+      },
+      "worst_rate": 0.7291666666666666,
+      "mean_rate": 0.8020833333333333
+    },
+    {
+      "net": "training/runs/20260612-gumbel-stratified-alpha-focus-20m/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7291666666666666
+      },
+      "worst_rate": 0.7291666666666666,
+      "mean_rate": 0.8020833333333333
+    },
+    {
+      "net": "training/runs/20260612-factorized-type-cem-smoke/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.7291666666666666
+      },
+      "worst_rate": 0.7291666666666666,
+      "mean_rate": 0.796875
+    },
+    {
+      "net": "training/runs/20260612-gumbel-alpha-focus-20m/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.7291666666666666
+      },
+      "worst_rate": 0.7291666666666666,
+      "mean_rate": 0.796875
+    },
+    {
+      "net": "training/runs/20260612-gumbel-alpha-focus-20m/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.7291666666666666
+      },
+      "worst_rate": 0.7291666666666666,
+      "mean_rate": 0.796875
+    },
+    {
+      "net": "training/runs/20260612-gumbel-alpha-pure/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.7291666666666666
+      },
+      "worst_rate": 0.7291666666666666,
+      "mean_rate": 0.796875
+    },
+    {
+      "net": "training/runs/20260612-gumbel-alpha-pure-fixed/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7083333333333334
+      },
+      "worst_rate": 0.7083333333333334,
+      "mean_rate": 0.7916666666666667
+    },
+    {
+      "net": "training/runs/20260612-gumbel-alpha-pure-fixed/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.875,
+        "heuristic_v2": 0.7083333333333334
+      },
+      "worst_rate": 0.7083333333333334,
+      "mean_rate": 0.7916666666666667
+    },
+    {
+      "net": "training/runs/20260612-2244-h2-policy-head-continuation-5m/screening/base.ctnn",
+      "rates": {
+        "heuristic": 0.8854166666666666,
+        "heuristic_v2": 0.6979166666666666
+      },
+      "worst_rate": 0.6979166666666666,
+      "mean_rate": 0.7916666666666666
+    },
+    {
+      "net": "training/runs/20260612-gumbel-stratified-alpha-focus-20m/best_observed.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8854166666666666,
+        "heuristic_v2": 0.6979166666666666
+      },
+      "worst_rate": 0.6979166666666666,
+      "mean_rate": 0.7916666666666666
+    },
+    {
+      "net": "training/runs/20260611-catanzero-v2/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.6875
+      },
+      "worst_rate": 0.6875,
+      "mean_rate": 0.7708333333333333
+    },
+    {
+      "net": "training/runs/20260612-alpha-cem-openings/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.6875
+      },
+      "worst_rate": 0.6875,
+      "mean_rate": 0.7708333333333333
+    },
+    {
+      "net": "training/runs/20260612-alpha-cem-smoke/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.6875
+      },
+      "worst_rate": 0.6875,
+      "mean_rate": 0.7708333333333333
+    },
+    {
+      "net": "training/runs/20260612-h2-cem-type-screen/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.6875
+      },
+      "worst_rate": 0.6875,
+      "mean_rate": 0.7708333333333333
+    },
+    {
+      "net": "training/runs/20260612-outcome-calibration-smoke/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.6875
+      },
+      "worst_rate": 0.6875,
+      "mean_rate": 0.7708333333333333
+    },
+    {
+      "net": "training/runs/20260612-alpha-cem-smoke-v2/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.6770833333333334
+      },
+      "worst_rate": 0.6770833333333334,
+      "mean_rate": 0.7708333333333334
+    },
+    {
+      "net": "training/runs/20260611-1024-catanzero-pr1/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.7395833333333334,
+        "heuristic_v2": 0.6666666666666666
+      },
+      "worst_rate": 0.6666666666666666,
+      "mean_rate": 0.703125
+    },
+    {
+      "net": "training/runs/20260611-210828-catanzero-pr1/best.pool.ctnn",
+      "rates": {
+        "heuristic": 0.6979166666666666,
+        "heuristic_v2": 0.5729166666666666
+      },
+      "worst_rate": 0.5729166666666666,
+      "mean_rate": 0.6354166666666666
+    }
+  ]
+}

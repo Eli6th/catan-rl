@@ -39,6 +39,14 @@ use catan_core::game::{Action, CatanGame, GamePhase};
 
 pub const NUM_ACTIONS: usize = 299;
 
+/// End-exclusive boundaries for the semantic action groups in the codec.
+///
+/// Search policies can use these boundaries to guarantee root coverage across
+/// move types without duplicating the fixed action layout outside this module.
+pub const ACTION_TYPE_BOUNDARIES: [usize; 17] = [
+    54, 108, 180, 199, 203, 208, 213, 228, 248, 288, 290, 294, 295, 296, 297, 298, 299,
+];
+
 /// Version of the action-space layout. Trained checkpoints store this and
 /// must refuse to load against a different version: changing any id
 /// reassigns the meaning of the network's output neurons. Bump on ANY

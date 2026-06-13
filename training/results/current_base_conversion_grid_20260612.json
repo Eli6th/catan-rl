@@ -1,0 +1,311 @@
+{
+  "net": "training/runs/20260612-2244-h2-policy-head-continuation-5m/screening/base.ctnn",
+  "games_per_opponent": 96,
+  "seeds": [
+    36700000,
+    36800000,
+    36900000
+  ],
+  "results": [
+    {
+      "config": {
+        "name": "state_010",
+        "endgame_road_push": false,
+        "knight_pressure": false,
+        "leader_robber_weight": 0.0,
+        "blocking_settlement_weight": 0.0,
+        "trade_refinement": false,
+        "resource_tactics": false,
+        "end_turn_trade_sweep": false,
+        "evolved_state_refinement": false,
+        "state_refinement_mix": 0.1
+      },
+      "rates": {
+        "heuristic": 0.84375,
+        "heuristic_v2": 0.84375
+      },
+      "worst_rate": 0.84375,
+      "mean_rate": 0.84375
+    },
+    {
+      "config": {
+        "name": "leader_robber",
+        "endgame_road_push": false,
+        "knight_pressure": false,
+        "leader_robber_weight": 1.0,
+        "blocking_settlement_weight": 0.0,
+        "trade_refinement": false,
+        "resource_tactics": false,
+        "end_turn_trade_sweep": false,
+        "evolved_state_refinement": false,
+        "state_refinement_mix": 0.0
+      },
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.8333333333333334
+      },
+      "worst_rate": 0.8333333333333334,
+      "mean_rate": 0.8489583333333334
+    },
+    {
+      "config": {
+        "name": "knight",
+        "endgame_road_push": false,
+        "knight_pressure": true,
+        "leader_robber_weight": 0.0,
+        "blocking_settlement_weight": 0.0,
+        "trade_refinement": false,
+        "resource_tactics": false,
+        "end_turn_trade_sweep": false,
+        "evolved_state_refinement": false,
+        "state_refinement_mix": 0.0
+      },
+      "rates": {
+        "heuristic": 0.84375,
+        "heuristic_v2": 0.8229166666666666
+      },
+      "worst_rate": 0.8229166666666666,
+      "mean_rate": 0.8333333333333333
+    },
+    {
+      "config": {
+        "name": "road_push_knight",
+        "endgame_road_push": true,
+        "knight_pressure": true,
+        "leader_robber_weight": 0.0,
+        "blocking_settlement_weight": 0.0,
+        "trade_refinement": false,
+        "resource_tactics": false,
+        "end_turn_trade_sweep": false,
+        "evolved_state_refinement": false,
+        "state_refinement_mix": 0.0
+      },
+      "rates": {
+        "heuristic": 0.84375,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.8125,
+      "mean_rate": 0.828125
+    },
+    {
+      "config": {
+        "name": "baseline",
+        "endgame_road_push": false,
+        "knight_pressure": false,
+        "leader_robber_weight": 0.0,
+        "blocking_settlement_weight": 0.0,
+        "trade_refinement": false,
+        "resource_tactics": false,
+        "end_turn_trade_sweep": false,
+        "evolved_state_refinement": false,
+        "state_refinement_mix": 0.0
+      },
+      "rates": {
+        "heuristic": 0.8333333333333334,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.8125,
+      "mean_rate": 0.8229166666666667
+    },
+    {
+      "config": {
+        "name": "blocking_5",
+        "endgame_road_push": false,
+        "knight_pressure": false,
+        "leader_robber_weight": 0.0,
+        "blocking_settlement_weight": 5.0,
+        "trade_refinement": false,
+        "resource_tactics": false,
+        "end_turn_trade_sweep": false,
+        "evolved_state_refinement": false,
+        "state_refinement_mix": 0.0
+      },
+      "rates": {
+        "heuristic": 0.8333333333333334,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.8125,
+      "mean_rate": 0.8229166666666667
+    },
+    {
+      "config": {
+        "name": "blocking_20",
+        "endgame_road_push": false,
+        "knight_pressure": false,
+        "leader_robber_weight": 0.0,
+        "blocking_settlement_weight": 20.0,
+        "trade_refinement": false,
+        "resource_tactics": false,
+        "end_turn_trade_sweep": false,
+        "evolved_state_refinement": false,
+        "state_refinement_mix": 0.0
+      },
+      "rates": {
+        "heuristic": 0.8333333333333334,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.8125,
+      "mean_rate": 0.8229166666666667
+    },
+    {
+      "config": {
+        "name": "trade_sweep",
+        "endgame_road_push": false,
+        "knight_pressure": false,
+        "leader_robber_weight": 0.0,
+        "blocking_settlement_weight": 0.0,
+        "trade_refinement": false,
+        "resource_tactics": false,
+        "end_turn_trade_sweep": true,
+        "evolved_state_refinement": false,
+        "state_refinement_mix": 0.0
+      },
+      "rates": {
+        "heuristic": 0.8333333333333334,
+        "heuristic_v2": 0.8125
+      },
+      "worst_rate": 0.8125,
+      "mean_rate": 0.8229166666666667
+    },
+    {
+      "config": {
+        "name": "evolved_state_005",
+        "endgame_road_push": false,
+        "knight_pressure": false,
+        "leader_robber_weight": 0.0,
+        "blocking_settlement_weight": 0.0,
+        "trade_refinement": false,
+        "resource_tactics": false,
+        "end_turn_trade_sweep": false,
+        "evolved_state_refinement": true,
+        "state_refinement_mix": 0.05
+      },
+      "rates": {
+        "heuristic": 0.8645833333333334,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8333333333333334
+    },
+    {
+      "config": {
+        "name": "state_005",
+        "endgame_road_push": false,
+        "knight_pressure": false,
+        "leader_robber_weight": 0.0,
+        "blocking_settlement_weight": 0.0,
+        "trade_refinement": false,
+        "resource_tactics": false,
+        "end_turn_trade_sweep": false,
+        "evolved_state_refinement": false,
+        "state_refinement_mix": 0.05
+      },
+      "rates": {
+        "heuristic": 0.8541666666666666,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.828125
+    },
+    {
+      "config": {
+        "name": "road_push",
+        "endgame_road_push": true,
+        "knight_pressure": false,
+        "leader_robber_weight": 0.0,
+        "blocking_settlement_weight": 0.0,
+        "trade_refinement": false,
+        "resource_tactics": false,
+        "end_turn_trade_sweep": false,
+        "evolved_state_refinement": false,
+        "state_refinement_mix": 0.0
+      },
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8125
+    },
+    {
+      "config": {
+        "name": "road_push_blocking",
+        "endgame_road_push": true,
+        "knight_pressure": false,
+        "leader_robber_weight": 0.0,
+        "blocking_settlement_weight": 5.0,
+        "trade_refinement": false,
+        "resource_tactics": false,
+        "end_turn_trade_sweep": false,
+        "evolved_state_refinement": false,
+        "state_refinement_mix": 0.0
+      },
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.8020833333333334
+      },
+      "worst_rate": 0.8020833333333334,
+      "mean_rate": 0.8125
+    },
+    {
+      "config": {
+        "name": "trade",
+        "endgame_road_push": false,
+        "knight_pressure": false,
+        "leader_robber_weight": 0.0,
+        "blocking_settlement_weight": 0.0,
+        "trade_refinement": true,
+        "resource_tactics": false,
+        "end_turn_trade_sweep": false,
+        "evolved_state_refinement": false,
+        "state_refinement_mix": 0.0
+      },
+      "rates": {
+        "heuristic": 0.84375,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7916666666666666,
+      "mean_rate": 0.8177083333333333
+    },
+    {
+      "config": {
+        "name": "road_push_resource",
+        "endgame_road_push": true,
+        "knight_pressure": false,
+        "leader_robber_weight": 0.0,
+        "blocking_settlement_weight": 0.0,
+        "trade_refinement": false,
+        "resource_tactics": true,
+        "end_turn_trade_sweep": false,
+        "evolved_state_refinement": false,
+        "state_refinement_mix": 0.0
+      },
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.8385416666666667
+    },
+    {
+      "config": {
+        "name": "resource",
+        "endgame_road_push": false,
+        "knight_pressure": false,
+        "leader_robber_weight": 0.0,
+        "blocking_settlement_weight": 0.0,
+        "trade_refinement": false,
+        "resource_tactics": true,
+        "end_turn_trade_sweep": false,
+        "evolved_state_refinement": false,
+        "state_refinement_mix": 0.0
+      },
+      "rates": {
+        "heuristic": 0.8958333333333334,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.8333333333333334
+    }
+  ]
+}

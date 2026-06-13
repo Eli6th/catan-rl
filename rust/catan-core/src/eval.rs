@@ -18,7 +18,9 @@ use rand::{Rng, SeedableRng};
 use crate::board::topology;
 use crate::game::{Action, CatanGame};
 use crate::players::Player;
-use crate::state::{GameState, DEV_VICTORY_POINT, NUM_DEV_CARD_TYPES, NUM_RESOURCES};
+use crate::state::{
+    GameState, DEV_CARD_COST, DEV_VICTORY_POINT, NUM_DEV_CARD_TYPES, NUM_RESOURCES,
+};
 
 pub const NUM_VALUE_PARAMS: usize = 17;
 
@@ -80,11 +82,22 @@ impl ValueParams {
     pub fn to_array(self) -> [f32; NUM_VALUE_PARAMS] {
         [
             self.vp,
-            self.income[0], self.income[1], self.income[2], self.income[3], self.income[4],
-            self.diversity, self.port_any, self.port_matched,
-            self.hand, self.hand_excess, self.overflow,
-            self.dev_card, self.knight, self.road_len,
-            self.expansion, self.opp_lambda,
+            self.income[0],
+            self.income[1],
+            self.income[2],
+            self.income[3],
+            self.income[4],
+            self.diversity,
+            self.port_any,
+            self.port_matched,
+            self.hand,
+            self.hand_excess,
+            self.overflow,
+            self.dev_card,
+            self.knight,
+            self.road_len,
+            self.expansion,
+            self.opp_lambda,
         ]
     }
 
@@ -110,7 +123,7 @@ impl ValueParams {
 /// Expected per-roll income of one player, robber-aware: for every owned
 /// building, each adjacent producing tile adds its roll probability
 /// (doubled for cities) unless the robber sits on it.
-fn income_by_resource(state: &GameState, player: usize) -> [f32; NUM_RESOURCES] {
+pub fn income_by_resource(state: &GameState, player: usize) -> [f32; NUM_RESOURCES] {
     let topo = topology();
     let mut income = [0f32; NUM_RESOURCES];
     let mut mask = state.occupied_mask;
@@ -177,8 +190,7 @@ pub fn position_score(state: &GameState, player: usize, p: &ValueParams) -> f32 
     // board position is not. Value the two best spots.
     let topo = topology();
     let (mut best, mut second) = (0f32, 0f32);
-    let mut spots =
-        state.vertex_road_mask[player] & !state.occupied_mask & ((1u64 << 54) - 1);
+    let mut spots = state.vertex_road_mask[player] & !state.occupied_mask & ((1u64 << 54) - 1);
     while spots != 0 {
         let v = spots.trailing_zeros() as usize;
         spots &= spots - 1;
@@ -214,21 +226,33 @@ pub fn evaluate_state(state: &GameState, player: usize, p: &ValueParams) -> f32 
     let mine = position_score(state, player, p);
     let best_opp = (0..state.num_players)
         .filter(|&q| q != player)
-        .map(|q| position_score(state, q, p))
+        .map(|q| public_opponent_score(state, q, p))
         .fold(f32::MIN, f32::max);
     mine - p.opp_lambda * best_opp
+}
+
+fn public_opponent_score(state: &GameState, player: usize, p: &ValueParams) -> f32 {
+    let total_resources = state.total_resources(player);
+    let held_dev: i16 = state.dev_cards[player]
+        .iter()
+        .map(|count| *count as i16)
+        .sum();
+    let mut public = state.clone();
+    public.resources[player] = [0; NUM_RESOURCES];
+    public.dev_cards[player] = [0; NUM_DEV_CARD_TYPES];
+    let public_board = position_score(&public, player, p);
+    let hand_score = p.hand * total_resources.min(10) as f32
+        + p.hand_excess * (total_resources - 10).max(0) as f32
+        - p.overflow * (total_resources - 7).max(0) as f32;
+    public_board + hand_score + p.dev_card * held_dev as f32
 }
 
 /// 1-ply greedy lookahead: simulate every legal action on a cloned game and
 /// take the argmax of `evaluate_state` (random tie-break).
 ///
-/// Known modeling shortcuts, deliberate for a sparring bot:
-/// - `RollDice` is scored as the pre-roll state (cloning the game clones the
-///   RNG, so simulating the roll would let the bot peek at the actual dice).
-/// - `BuyDevCard` / `StealResource` simulation does reveal the true draw the
-///   same way; their value terms dominate, so the leak is minor.
-/// - Like the other bots it never initiates trade proposals (it does respond
-///   to and confirm them, via lookahead).
+/// Hidden chance is evaluated in expectation: dice, development-card draws,
+/// steals, and monopoly outcomes are never executed on a cloned live RNG.
+/// Like the other bots it never initiates trade proposals.
 pub struct GreedyValuePlayer {
     rng: SmallRng,
     pub params: ValueParams,
@@ -260,15 +284,39 @@ impl Player for GreedyValuePlayer {
             if matches!(action, Action::ProposeTrade { .. }) {
                 continue;
             }
-            let score = if matches!(action, Action::RollDice { .. }) {
-                baseline
-            } else {
-                let mut sim = game.clone();
-                sim.record_history = false;
-                if !sim.execute_action(&action) {
-                    continue;
+            let score = match action {
+                Action::RollDice { .. } => baseline,
+                Action::BuyDevCard { .. } => {
+                    let mut state = game.state.clone();
+                    for (resource, cost) in state.resources[me].iter_mut().zip(DEV_CARD_COST) {
+                        *resource -= cost;
+                    }
+                    evaluate_state(&state, me, &self.params)
+                        + self.params.dev_card
+                        + 0.2 * self.params.vp
                 }
-                evaluate_state(&sim.state, me, &self.params)
+                Action::StealResource { victim, .. } => {
+                    if victim < 0 {
+                        baseline
+                    } else {
+                        baseline + 0.01 * game.state.total_resources(victim as usize) as f32
+                    }
+                }
+                Action::PlayMonopoly { resource, .. } => {
+                    let expected_supply = (0..game.state.num_players)
+                        .filter(|player| *player != me)
+                        .map(|player| income_by_resource(&game.state, player)[resource as usize])
+                        .sum::<f32>();
+                    baseline + self.params.hand * expected_supply
+                }
+                _ => {
+                    let mut sim = game.clone();
+                    sim.record_history = false;
+                    if !sim.execute_action(&action) {
+                        continue;
+                    }
+                    evaluate_state(&sim.state, me, &self.params)
+                }
             };
             if score > best_score {
                 best_score = score;

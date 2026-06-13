@@ -1,0 +1,375 @@
+{
+  "net": "training/runs/20260612-2244-h2-policy-head-continuation-5m/screening/base.ctnn",
+  "games_per_opponent": 96,
+  "seeds": [
+    39700000,
+    39800000,
+    39900000
+  ],
+  "results": [
+    {
+      "config": {
+        "blocking_settlement_weight": 0.0,
+        "knight_pressure": true,
+        "endgame_road_push": false
+      },
+      "rates": {
+        "heuristic": 0.8333333333333334,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.8072916666666667
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 0.0,
+        "knight_pressure": true,
+        "endgame_road_push": true
+      },
+      "rates": {
+        "heuristic": 0.8229166666666666,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.8020833333333333
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 2.0,
+        "knight_pressure": true,
+        "endgame_road_push": false
+      },
+      "rates": {
+        "heuristic": 0.8125,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.796875
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 4.0,
+        "knight_pressure": true,
+        "endgame_road_push": false
+      },
+      "rates": {
+        "heuristic": 0.8125,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.796875
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 8.0,
+        "knight_pressure": true,
+        "endgame_road_push": false
+      },
+      "rates": {
+        "heuristic": 0.8125,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.796875
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 16.0,
+        "knight_pressure": true,
+        "endgame_road_push": false
+      },
+      "rates": {
+        "heuristic": 0.8125,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.796875
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 2.0,
+        "knight_pressure": true,
+        "endgame_road_push": true
+      },
+      "rates": {
+        "heuristic": 0.8020833333333334,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.7916666666666667
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 4.0,
+        "knight_pressure": true,
+        "endgame_road_push": true
+      },
+      "rates": {
+        "heuristic": 0.8020833333333334,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.7916666666666667
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 8.0,
+        "knight_pressure": true,
+        "endgame_road_push": true
+      },
+      "rates": {
+        "heuristic": 0.8020833333333334,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.7916666666666667
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 16.0,
+        "knight_pressure": true,
+        "endgame_road_push": true
+      },
+      "rates": {
+        "heuristic": 0.8020833333333334,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.78125,
+      "mean_rate": 0.7916666666666667
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 0.5,
+        "knight_pressure": true,
+        "endgame_road_push": false
+      },
+      "rates": {
+        "heuristic": 0.8125,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.7916666666666667
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 1.0,
+        "knight_pressure": true,
+        "endgame_road_push": false
+      },
+      "rates": {
+        "heuristic": 0.8125,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.7916666666666667
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 0.5,
+        "knight_pressure": true,
+        "endgame_road_push": true
+      },
+      "rates": {
+        "heuristic": 0.8020833333333334,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.7864583333333334
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 1.0,
+        "knight_pressure": true,
+        "endgame_road_push": true
+      },
+      "rates": {
+        "heuristic": 0.8020833333333334,
+        "heuristic_v2": 0.7708333333333334
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.7864583333333334
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 0.0,
+        "knight_pressure": false,
+        "endgame_road_push": false
+      },
+      "rates": {
+        "heuristic": 0.7708333333333334,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7708333333333334,
+      "mean_rate": 0.78125
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 0.0,
+        "knight_pressure": false,
+        "endgame_road_push": true
+      },
+      "rates": {
+        "heuristic": 0.7604166666666666,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.7760416666666666
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 2.0,
+        "knight_pressure": false,
+        "endgame_road_push": false
+      },
+      "rates": {
+        "heuristic": 0.7604166666666666,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.7760416666666666
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 4.0,
+        "knight_pressure": false,
+        "endgame_road_push": false
+      },
+      "rates": {
+        "heuristic": 0.7604166666666666,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.7760416666666666
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 8.0,
+        "knight_pressure": false,
+        "endgame_road_push": false
+      },
+      "rates": {
+        "heuristic": 0.7604166666666666,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.7760416666666666
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 16.0,
+        "knight_pressure": false,
+        "endgame_road_push": false
+      },
+      "rates": {
+        "heuristic": 0.7604166666666666,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.7760416666666666
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 0.5,
+        "knight_pressure": false,
+        "endgame_road_push": false
+      },
+      "rates": {
+        "heuristic": 0.7604166666666666,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.7708333333333333
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 1.0,
+        "knight_pressure": false,
+        "endgame_road_push": false
+      },
+      "rates": {
+        "heuristic": 0.7604166666666666,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.7604166666666666,
+      "mean_rate": 0.7708333333333333
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 2.0,
+        "knight_pressure": false,
+        "endgame_road_push": true
+      },
+      "rates": {
+        "heuristic": 0.75,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.7708333333333333
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 4.0,
+        "knight_pressure": false,
+        "endgame_road_push": true
+      },
+      "rates": {
+        "heuristic": 0.75,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.7708333333333333
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 8.0,
+        "knight_pressure": false,
+        "endgame_road_push": true
+      },
+      "rates": {
+        "heuristic": 0.75,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.7708333333333333
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 16.0,
+        "knight_pressure": false,
+        "endgame_road_push": true
+      },
+      "rates": {
+        "heuristic": 0.75,
+        "heuristic_v2": 0.7916666666666666
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.7708333333333333
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 0.5,
+        "knight_pressure": false,
+        "endgame_road_push": true
+      },
+      "rates": {
+        "heuristic": 0.75,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.765625
+    },
+    {
+      "config": {
+        "blocking_settlement_weight": 1.0,
+        "knight_pressure": false,
+        "endgame_road_push": true
+      },
+      "rates": {
+        "heuristic": 0.75,
+        "heuristic_v2": 0.78125
+      },
+      "worst_rate": 0.75,
+      "mean_rate": 0.765625
+    }
+  ]
+}
